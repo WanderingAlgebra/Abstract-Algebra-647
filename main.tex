@@ -1,0 +1,95 @@
+% 抽象代数笔记 - 主文件
+\documentclass[cn,blue,chinese,nofont]{elegantbook}
+
+% 中文字体设置
+\usepackage{xeCJK}
+\setCJKmainfont[BoldFont={Songti SC Bold}]{Songti SC}
+\setCJKsansfont[BoldFont={Heiti SC Medium}]{Heiti SC}
+\setCJKmonofont{STFangsong}
+
+% 封面设置
+\cover{IMG_0184.JPG}
+
+% 数学相关包
+\usepackage{amsmath,amssymb}
+\usepackage{mathtools}
+\usepackage{extarrows}
+
+% 定理环境设置（使用elegantbook内置）
+% elegantbook已经定义了theorem, definition, lemma, corollary, proposition等环境
+% 如需自定义，可以使用\elegantnewtheorem命令
+
+% 交叉引用
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+% 文档信息
+\title{抽象代数期末复习（647版）}
+\author{Wanderingalg}
+\date{\today}
+
+% 将封面图与标题信息合并到同一页
+\makeatletter
+\renewcommand*{\maketitle}{%
+  \hypersetup{pageanchor=false}%
+  \pagenumbering{Alph}%
+  \begin{titlepage}
+    \newgeometry{margin=0in}%
+    \thispagestyle{empty}%
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[anchor=center,inner sep=0pt] at (current page.center)
+        {\includegraphics[height=\paperheight]{IMG_0184.JPG}};
+      \fill[white,opacity=0.88]
+        ([xshift=1.15cm,yshift=1.45cm]current page.south west)
+        rectangle
+        ([xshift=-1.15cm,yshift=5.65cm]current page.south east);
+      \draw[coverlinecolor,line width=1.4pt]
+        ([xshift=1.15cm,yshift=5.65cm]current page.south west)
+        --
+        ([xshift=-1.15cm,yshift=5.65cm]current page.south east);
+      \node[
+        anchor=south west,
+        align=left,
+        text width=0.78\paperwidth
+      ] at ([xshift=1.65cm,yshift=2.3cm]current page.south west) {%
+        {\bfseries\fontsize{32}{40}\selectfont \@title\par}%
+        \vspace{1.0cm}%
+        {\color{gray}\Large
+          \ifx\@author\empty\else 作者：\cnormal\@author\quad\fi
+          \ifx\@date\empty\else 时间：\cnormal\@date\fi
+        }%
+      };
+    \end{tikzpicture}%
+    \null
+  \end{titlepage}%
+  \restoregeometry
+  \hypersetup{pageanchor=true}%
+}
+\makeatother
+
+\begin{document}
+
+% 封面
+\maketitle
+
+% 目录
+\tableofcontents
+\mainmatter
+
+% 第一章：域
+\chapter{域}
+\input{chapters/ch01}
+
+% 后续章节可以在这里添加
+% \chapter{环}
+% \input{chapters/ch02}
+
+% \chapter{群}
+% \input{chapters/ch03}
+
+\end{document}

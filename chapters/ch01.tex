@@ -1,0 +1,1355 @@
+% why-notes: true
+% expositor: true
+
+\section{域的定义}\label{sec:field-definition}
+
+本节的核心问题只有一个：\textbf{什么是域？}
+域是同时拥有"加法"和"乘法"两种运算的集合，且这两种运算各自构成阿贝尔群，通过分配律相容。
+如果记住了这句话，本节所有定义、性质、例子都是这句话的展开。
+
+在学习抽象代数之前，我们已经熟悉了多种"数系"：整数 $\mathbb{Z}$、有理数 $\mathbb{Q}$、实数 $\mathbb{R}$、复数 $\mathbb{C}$。
+这些数系有一个共同特征：可以做\textbf{加法}和\textbf{乘法}，且两种运算满足我们熟悉的运算律。
+
+现在，我们想要抽象出一个\textbf{最小的公理系统}，使得满足这个系统的集合都能像有理数、实数一样进行四则运算。
+这就是\textbf{域}（field）的定义动机。
+
+\subsection{公理化定义}
+
+在看到正式定义之前，可以先问自己：一个能做"加减乘除"的集合，至少需要哪些公理？
+提示：想想有理数 $\mathbb{Q}$——你做加法和乘法时，分别用到了哪些性质？
+
+本节使用了"阿贝尔群"的概念。完整定义见群论章节。在阅读本节时，你只需要知道：
+\begin{itemize}
+    \item 阿贝尔群是一个集合 $G$ 配上一种运算 $\cdot$，满足：结合律、交换律、存在单位元、每个元素有逆元
+    \item 记号：单位元通常记为 $e$ 或 $0$（加法群）或 $1$（乘法群）
+\end{itemize}
+一句话记忆：阿贝尔群 = 可交换的群。
+
+\hypertarget{q:field-what-is-field}{}
+\medskip
+\noindent\textbf{思考：用自己的话说：什么是域？}（\hyperlink{ans:field-what-is-field}{跳转到解答}。）
+\medskip
+
+\begin{definition}[域]\label{def:field}
+设 $F$ 是一个非空集合，配备两种二元运算 $+$（加法）和 $\cdot$（乘法），满足以下公理：
+
+\begin{enumerate}
+    \item \textbf{加法阿贝尔群}：$(F, +)$ 构成阿贝尔群，即：
+    \begin{itemize}
+        \item 加法结合律：$(a + b) + c = a + (b + c)$——加法的顺序不影响结果
+        \item 加法交换律：$a + b = b + a$——加法的顺序可以交换
+        \item 加法单位元：存在 $0 \in F$，使得 $a + 0 = a$——有一个"加了不变"的元素
+        \item 加法逆元：对任意 $a \in F$，存在 $-a \in F$，使得 $a + (-a) = 0$——每个元素都能"减掉"
+    \end{itemize}
+
+    \item \textbf{乘法阿贝尔群}：$(F \setminus \{0\}, \cdot)$ 构成阿贝尔群，即：
+    \begin{itemize}
+        \item 乘法结合律：$(a \cdot b) \cdot c = a \cdot (b \cdot c)$——乘法的顺序不影响结果
+        \item 乘法交换律：$a \cdot b = b \cdot a$——乘法的顺序可以交换
+        \item 乘法单位元：存在 $1 \in F \setminus \{0\}$，使得 $a \cdot 1 = a$——有一个"乘了不变"的元素
+        \item 乘法逆元：对任意 $a \in F \setminus \{0\}$，存在 $a^{-1} \in F$，使得 $a \cdot a^{-1} = 1$——每个非零元素都能"除掉"
+    \end{itemize}
+
+    \item \textbf{分配律}：乘法对加法满足分配律：
+    \[a \cdot (b + c) = a \cdot b + a \cdot c\]
+    这条公理连接了加法和乘法，使得我们可以做代数运算（如展开 $(a+b)(c+d)$）。
+\end{enumerate}
+\end{definition}
+
+在域的定义中，$0$ 是加法的单位元，$1$ 是乘法的单位元。直觉：$0$ 是"加了不变"的元素，$1$ 是"乘了不变"的元素。
+这也解释了加法和乘法为什么不是完全对称的：分配律规定的是乘法如何作用在加法上，而不是反过来。
+正是这条相容关系，把两个各自良好的运算组织成一个可以做代数计算的整体。
+
+域的定义看起来条件很多，但核心想法只有一个：域是一个能做四则运算的集合。
+如果你记住了这一点，后面的定义、性质、例子都是这个核心想法的展开。
+
+我们后面会看到，域是抽象代数中最"好用"的代数结构之一：它既有加法又有乘法，两种运算通过分配律相容，使得我们可以做代数运算。
+但域也是条件最严格的代数结构：它要求乘法有单位元和逆元，这比环和群的要求都强。
+我们先讲域，再讲环，最后讲群——从具体到抽象，从熟悉到陌生。
+
+\subsection{基本性质}
+
+\hypertarget{q:no-distributive-law}{}
+\medskip
+\noindent\textbf{思考：如果去掉分配律，会怎样？}（\hyperlink{ans:no-distributive-law}{跳转到解答}。）
+\medskip
+
+\paragraph*{性质 1：零乘性质}
+在任意域中，零元素乘任何元素都等于零。这个结论的关键不是"零看起来应该把东西消掉"，而是 $0+0=0$ 与分配律共同作用。
+证明的策略是：利用 $0 = 0 + 0$ 这个事实，再用分配律把 $0 \cdot a$ 拆成两项，从而得到一个关于 $0 \cdot a$ 的等式。
+
+对任意 $a \in F$，有
+\begin{align*}
+0 \cdot a &= (0 + 0) \cdot a \quad \text{（因为 $0 = 0 + 0$）} \\
+          &= 0 \cdot a + 0 \cdot a \quad \text{（分配律）}
+\end{align*}
+两边同时加上 $-(0 \cdot a)$，得到
+\[0 = 0 \cdot a\]
+特别地，取 $a = 0$，便得 $0 \cdot 0 = 0$。
+
+这个证明只用到了加法单位元的性质（$0 = 0 + 0$）和分配律，没有用到乘法的任何性质。
+这意味着零乘性质在更一般的代数结构（如环）中也成立，只要分配律成立即可。$\square$
+
+\paragraph*{重要推论：$0 \neq 1$}
+若 $0 = 1$，则对任意 $a \in F$：
+\[a = a \cdot 1 = a \cdot 0 = 0\]
+这意味着 $F = \{0\}$，只得到退化的一元结构。通常的域定义直接要求 $0 \neq 1$，也就是排除这种退化情形。
+
+这个推论揭示了域的一个基本约束：$0$ 和 $1$ 必须是不同的元素。
+如果它们相同，整个域就坍缩成只有一个元素的平凡结构。
+这也解释了为什么在定义中要特别强调 $1 \in F \setminus \{0\}$——乘法单位元不能是零元素。 $\square$
+
+\subsection{域的构造}
+
+% 叙事桥接
+从公理出发，我们已经知道域必须满足什么。自然的问题是：除了我们熟悉的有理数 $\mathbb{Q}$、实数 $\mathbb{R}$，还有哪些集合能成为域？
+
+我们先从一个具体的例子开始：$\mathbb{Q}(\sqrt[3]{2})$。
+这个例子将展示如何从一个无理数构造出一个域，同时也会暴露"逐个验证"方法的局限性，从而引出更一般的构造方法。
+
+\paragraph*{例 1：$\mathbb{Q}(\sqrt[3]{2})$}
+
+考虑 $\sqrt[3]{2}$（$2$ 的三次方根）。我们知道 $\sqrt[3]{2} \notin \mathbb{Q}$，因为 $x^3 - 2$ 在 $\mathbb{Q}$ 上不可约。
+
+定义
+\[\mathbb{Q}(\sqrt[3]{2}) = \{a + b\sqrt[3]{2} + c\sqrt[3]{4} \mid a, b, c \in \mathbb{Q}\}\]
+两个这种形式的元素相加仍是这种形式；相乘后虽然会出现高次项，但都可以用 $(\sqrt[3]{2})^3=2$ 降回二次以内。
+因此，加法和乘法封闭主要是计算问题。真正需要花力气的是乘法逆元，因为它要求我们构造出一个能把非零元素乘回 $1$ 的元素。
+
+在看逆元构造之前，可以先尝试一个具体问题：如何构造 $\frac{1}{1 + \sqrt[3]{2} + \sqrt[3]{4}}$？
+提示：回想有理化分母的方法——$\sqrt[3]{2}$ 的平方项怎么消掉？
+
+% 乘法逆元的证明
+\paragraph*{乘法逆元的构造}
+令 $\omega = \sqrt[3]{2}$，则 $\omega^3 = 2$。
+对非零元素 $\alpha = a + b\omega + c\omega^2$，目标是构造 $1/\alpha$，使其仍落在 $\mathbb{Q}(\omega)$ 中。
+\[\frac{1}{\alpha} = \frac{1}{a + b\omega + c\omega^2}\]
+
+策略与中学的分母有理化完全一致：对 $1/(1+\sqrt{2})$，乘以"共轭" $1-\sqrt{2}$ 就消掉了根号。
+对三次的情形，"共轭"更复杂，但原理一样——找到另一个二次以内的表达式 $s(\omega)$，使得 $\alpha \cdot s(\omega)$ 利用 $\omega^3 = 2$ 降次后，所有含 $\omega$ 和 $\omega^2$ 的项恰好相消，结果落回 $\mathbb{Q}$。
+
+具体地，令
+\[s(\omega) = (a^2 - 2bc) + (2c^2 - ab)\omega + (b^2 - ac)\omega^2\]
+分子分母同乘以 $s(\omega)$。下面验证关键恒等式：
+\[(x + y\omega + z\omega^2)\big((x^2 - 2yz) + (2z^2 - xy)\omega + (y^2 - xz)\omega^2\big) = x^3 + 2y^3 + 4z^3 - 6xyz\]
+
+展开左端，逐项相乘：
+\begin{align*}
+&x(x^2 - 2yz) + x(2z^2 - xy)\omega + x(y^2 - xz)\omega^2 \\
++\,&y(x^2 - 2yz)\omega + y(2z^2 - xy)\omega^2 + y(y^2 - xz)\omega^3 \\
++\,&z(x^2 - 2yz)\omega^2 + z(2z^2 - xy)\omega^3 + z(y^2 - xz)\omega^4
+\end{align*}
+利用 $\omega^3 = 2$、$\omega^4 = 2\omega$ 化简，合并同类项：
+\begin{itemize}
+    \item \textbf{$\omega^2$ 项}：$x(y^2 - xz) + y(2z^2 - xy) + z(x^2 - 2yz) = xy^2 - x^2z + 2yz^2 - xy^2 + x^2z - 2yz^2 = 0$
+    \item \textbf{$\omega$ 项}：$x(2z^2 - xy) + y(x^2 - 2yz) + 2z(y^2 - xz) = 2xz^2 - x^2y + x^2y - 2y^2z + 2y^2z - 2xz^2 = 0$
+    \item \textbf{常数项}：$x(x^2 - 2yz) + 2y(y^2 - xz) + 2z(2z^2 - xy) = x^3 - 2xyz + 2y^3 - 2xyz + 4z^3 - 2xyz = x^3 + 2y^3 + 4z^3 - 6xyz$
+\end{itemize}
+含 $\omega$ 和 $\omega^2$ 的项全部相消，恒等式成立。因此
+\[\alpha^{-1} = \frac{(a^2 - 2bc) + (2c^2 - ab)\omega + (b^2 - ac)\omega^2}{a^3 + 2b^3 + 4c^3 - 6abc}\]
+
+分母为什么非零？因为 $x^3 - 2$ 在 $\mathbb{Q}$ 上不可约，$\{1, \omega, \omega^2\}$ 在 $\mathbb{Q}$ 上线性无关。
+若 $a^3 + 2b^3 + 4c^3 - 6abc = 0$，则 $\alpha$ 是零因子，与线性无关性矛盾。
+因此对任意非零 $\alpha$，分母不为零，逆元存在。 $\square$
+
+\paragraph*{观察}
+这个例子有什么特别之处？
+首先，它展示了如何从一个具体的无理数（$\sqrt[3]{2}$）构造出一个域。
+其次，它暴露了"逐个验证"方法的局限性：每换一个根，就重新做一套有理化计算，既不优雅，也不适合推广。
+尤其是逆元的构造——我们需要找到一个特定的多项式，使得乘积落回有理数。
+有没有更一般的构造方法？答案是有的——用\textbf{不可约多项式}。
+不可约性正好保证了非零元素不会和定义多项式共享因子，于是裴蜀定理可以直接给出逆元。
+
+这个例子还暗示了一个更一般的现象：域的构造与多项式的不可约性密切相关。
+我们后面会看到，这个观察将引导我们走向域扩张的一般理论。
+
+% 叙事桥接：从特殊到一般
+我们刚刚用具体的计算验证了 $\mathbb{Q}(\sqrt[3]{2})$ 是一个域。但这种"逐个验证"的方法太繁琐了。
+尤其是逆元：每换一个根，就重新做一套有理化计算，既不优雅，也不适合推广。
+有没有更一般的构造方法？答案是有的——用\textbf{不可约多项式}。
+不可约性正好保证了非零元素不会和定义多项式共享因子，于是裴蜀定理可以直接给出逆元。
+
+\begin{theorem}[域的扩张构造]\label{thm:field-extension}
+设 $f(x) \in \mathbb{Q}[x]$ 是有理数域上的不可约多项式，$\deg f = n$。
+设 $\alpha$ 是 $f$ 的一个根（在某个扩域中），则：
+\begin{enumerate}
+    \item 若 $n > 1$，则 $\alpha$ 是无理数（即 $\alpha \notin \mathbb{Q}$）
+    \item 集合 $\mathbb{Q}(\alpha) = \{g(\alpha) \mid g \in \mathbb{Q}[x], \deg g < n\}$ 构成一个域
+    \item $\mathbb{Q}(\alpha)$ 中的元素可以唯一表示为：
+    \[\mathbb{Q}(\alpha) = \{a_0 + a_1\alpha + a_2\alpha^2 + \cdots + a_{n-1}\alpha^{n-1} \mid a_i \in \mathbb{Q}\}\]
+\end{enumerate}
+\end{theorem}
+
+\hypertarget{q:reducible-polynomial}{}
+\medskip
+\noindent\textbf{思考：如果 $f$ 可约，会怎样？}（\hyperlink{ans:reducible-polynomial}{跳转到解答}。）
+\medskip
+
+\paragraph*{定理 \ref{thm:field-extension} 的证明}
+证明的策略是：验证 $\mathbb{Q}(\alpha)$ 满足域的所有公理。加法群结构和分配律都继承自多项式环，真正需要花力气的是乘法逆元的存在性。
+证明的核心有两件事：乘积可以用 $f$ 降次，逆元可以用裴蜀定理构造。
+
+先验证乘法封闭。设 $\beta = g(\alpha), \gamma = h(\alpha)$，其中 $\deg g, \deg h < n$。
+乘积 $g(x)h(x)$ 的次数可能 $\geq n$，但可以用 $f(x)$ 作带余除法：
+\[g(x)h(x) = q(x)f(x) + r(x), \quad \deg r < n\]
+代入 $\alpha$ 后，$f(\alpha)=0$，所以
+\[g(\alpha)h(\alpha) = q(\alpha)f(\alpha) + r(\alpha) = 0 + r(\alpha) = r(\alpha) \in \mathbb{Q}(\alpha)\]
+因此乘法封闭。
+余式 $r(x)$ 由带余除法唯一确定，所以 $\mathbb{Q}(\alpha)$ 中的乘法就是"多项式乘法，再模 $f(x)$ 取余式"——计算方法是明确的。
+
+再验证乘法逆元的存在性。设 $\beta = g(\alpha) \neq 0$，$\deg g < n$。
+由于 $f$ 不可约，$f$ 与这样的非零 $g$ 互素。
+由裴蜀定理，存在 $u(x), v(x)$ 使得 $u(x)f(x) + v(x)g(x) = 1$。
+代入 $\alpha$：
+\[u(\alpha) \cdot 0 + v(\alpha)g(\alpha) = 1\]
+即 $v(\alpha) = g(\alpha)^{-1}$。
+如果 $\deg v \geq n$，就把 $v$ 除以 $f$ 取余式 $r$；因为 $f(\alpha)=0$，所以 $v(\alpha)=r(\alpha)$，且 $\deg r < n$。
+因此 $v(\alpha) \in \mathbb{Q}(\alpha)$。
+这就是不可约性在构造域时真正发挥作用的地方。 $\square$
+
+\paragraph*{观察}
+这个证明揭示了不可约多项式在域构造中的核心作用：
+- 乘法封闭依赖于带余除法，而带余除法总是可行的。
+- 乘法逆元的存在性依赖于裴蜀定理，而裴蜀定理要求 $f$ 与 $g$ 互素——这正是不可约性保证的。
+
+如果 $f$ 可约，裴蜀定理仍然成立，但 $f$ 与 $g$ 可能不互素（它们可能共享因子），此时逆元可能不存在。
+这解释了为什么不可约性是构造域的关键条件。
+
+这个证明还暗示了一个更一般的构造方法：对任意不可约多项式 $f$，$\mathbb{Q}[x]/(f)$ 都是一个域。
+我们后面讲环论的时候会专门研究这种商环构造。
+
+\paragraph*{例 2：$\mathbb{Q}(\sqrt{2}, \sqrt{3})$}
+
+上面的例子由单个代数数生成；下面这个例子则同时由两个根生成。
+考虑同时包含 $\sqrt{2}$ 和 $\sqrt{3}$ 的最小域。
+
+$\mathbb{Q}(\sqrt{2}, \sqrt{3})$ 是包含 $\mathbb{Q}$、$\sqrt{2}$、$\sqrt{3}$ 的最小域。
+
+自然的问题是：这个域的元素长什么样？
+
+\paragraph*{$\mathbb{Q}(\sqrt{2}, \sqrt{3})$ 的结构}
+我们要证明
+\[\mathbb{Q}(\sqrt{2}, \sqrt{3}) = \{a + b\sqrt{2} + c\sqrt{3} + d\sqrt{6} \mid a,b,c,d \in \mathbb{Q}\}.\]
+一个简洁的办法是先证明 $\mathbb{Q}(\sqrt{2}, \sqrt{3}) = \mathbb{Q}(\sqrt{2} + \sqrt{3})$，再确定基。
+令 $\alpha = \sqrt{2} + \sqrt{3}$，则：
+\[\alpha^2 = (\sqrt{2} + \sqrt{3})^2 = 2 + 2\sqrt{6} + 3 = 5 + 2\sqrt{6}\]
+\[\alpha^3 = \alpha \cdot \alpha^2 = (\sqrt{2} + \sqrt{3})(5 + 2\sqrt{6}) = 5\sqrt{2} + 2\sqrt{12} + 5\sqrt{3} + 2\sqrt{18}\]
+其中 $\sqrt{12} = 2\sqrt{3}$，$\sqrt{18} = 3\sqrt{2}$，所以
+\[\alpha^3 = 5\sqrt{2} + 4\sqrt{3} + 5\sqrt{3} + 6\sqrt{2} = 11\sqrt{2} + 9\sqrt{3}\]
+
+现在用 $\alpha$ 和 $\alpha^3$ 解出 $\sqrt{2}$ 和 $\sqrt{3}$。观察
+\[\alpha^3 - 9\alpha = (11\sqrt{2} + 9\sqrt{3}) - (9\sqrt{2} + 9\sqrt{3}) = 2\sqrt{2}\]
+\[\alpha^3 - 11\alpha = (11\sqrt{2} + 9\sqrt{3}) - (11\sqrt{2} + 11\sqrt{3}) = -2\sqrt{3}\]
+因此
+\[\sqrt{2} = \frac{\alpha^3 - 9\alpha}{2}, \quad \sqrt{3} = \frac{11\alpha - \alpha^3}{2}\]
+两个根都在 $\mathbb{Q}(\alpha)$ 中，从而 $\sqrt{6} = \sqrt{2} \cdot \sqrt{3} \in \mathbb{Q}(\alpha)$。
+因此 $\mathbb{Q}(\sqrt{2}, \sqrt{3}) \subseteq \mathbb{Q}(\alpha)$；反过来 $\alpha = \sqrt{2} + \sqrt{3} \in \mathbb{Q}(\sqrt{2}, \sqrt{3})$ 显然。
+所以 $\mathbb{Q}(\sqrt{2}, \sqrt{3}) = \mathbb{Q}(\alpha)$。
+
+接下来证明 $\{1, \sqrt{2}, \sqrt{3}, \sqrt{6}\}$ 是 $\mathbb{Q}$-线性无关的。
+设 $a + b\sqrt{2} + c\sqrt{3} + d\sqrt{6} = 0$，其中 $a, b, c, d \in \mathbb{Q}$。
+整理为 $(a + b\sqrt{2}) + (c + d\sqrt{2})\sqrt{3} = 0$。
+
+若 $c + d\sqrt{2} \neq 0$，则 $\sqrt{3} = -\frac{a + b\sqrt{2}}{c + d\sqrt{2}} \in \mathbb{Q}(\sqrt{2})$。
+设 $\sqrt{3} = u + v\sqrt{2}$（$u, v \in \mathbb{Q}$），两边平方得 $3 = (u^2 + 2v^2) + 2uv\sqrt{2}$。
+因为 $\sqrt{2}$ 无理，必须 $2uv = 0$。
+若 $v = 0$，则 $u^2 = 3$，但 $\sqrt{3}$ 无理，矛盾；若 $u = 0$，则 $2v^2 = 3$，$v^2 = 3/2$，但 $\sqrt{3/2}$ 无理，矛盾。
+因此 $c + d\sqrt{2} = 0$。由 $\sqrt{2}$ 无理，$c = d = 0$。
+同理 $a + b\sqrt{2} = 0$，得 $a = b = 0$。
+
+线性无关性得证，因此 $\mathbb{Q}(\sqrt{2}, \sqrt{3})$ 是 $\mathbb{Q}$ 上的 4 维向量空间。 $\square$
+
+\paragraph*{观察}
+这个例子有什么特别之处？
+首先，它展示了如何从两个代数数（$\sqrt{2}$ 和 $\sqrt{3}$）构造出一个域。
+其次，它揭示了一个有趣的现象：$\mathbb{Q}(\sqrt{2}, \sqrt{3})$ 可以由单个元素（$\sqrt{2} + \sqrt{3}$）生成。
+这说明"由两个根生成的域"和"由单个元素生成的域"可能是同一个东西。
+
+这个例子还暗示了一个更一般的现象：有限扩张总是可以由单个元素生成。
+我们后面讲域扩张理论的时候会专门研究这个结论（本原元素定理）。
+
+这个例子与前面的 $\mathbb{Q}(\sqrt[3]{2})$ 有什么联系？
+两者都是通过添加代数数来构造域，但 $\mathbb{Q}(\sqrt{2}, \sqrt{3})$ 需要处理两个根的交互作用（$\sqrt{6} = \sqrt{2} \cdot \sqrt{3}$）。
+这说明域的构造不仅依赖于添加的元素，还依赖于它们之间的代数关系。
+
+% 有限域
+\subsection{有限域}
+
+\paragraph*{有限域的例子：$\mathbb{Z}_p$}
+
+% 叙事桥接
+到目前为止，我们构造的域都是无限域（包含无穷多个元素）。是否存在\textbf{有限}的域？答案是肯定的。
+
+\begin{definition}[$\mathbb{Z}_p$]\label{def:Zp}
+设 $p$ 是素数。定义 $\mathbb{Z}_p = \{0, 1, 2, \ldots, p-1\}$，配备模 $p$ 的加法和乘法：
+\[a +_p b = (a + b) \mod p, \quad a \cdot_p b = (a \cdot b) \mod p\]
+\end{definition}
+
+\begin{theorem}[$\mathbb{Z}_p$ 是域]\label{thm:Zp-field}
+对任意素数 $p$，$\mathbb{Z}_p$ 构成一个域。
+\end{theorem}
+
+\hypertarget{q:p-not-prime}{}
+\medskip
+\noindent\textbf{思考：如果 $p$ 不是素数，会怎样？}（\hyperlink{ans:p-not-prime}{跳转到解答}。）
+\medskip
+
+\paragraph*{定理 \ref{thm:Zp-field} 的证明}
+证明的策略是：验证 $\mathbb{Z}_p$ 满足域的所有公理。加法群结构和分配律都继承自整数模 $p$ 的运算，真正需要说明的是：每个非零元素都有乘法逆元。
+我们将给出两种证法：一种用裴蜀定理直接构造逆元，另一种用映射的角度理解逆元的存在性。
+
+\paragraph*{证法 1：裴蜀定理}
+设 $k \in \{1,2,\ldots,p-1\}$。因为 $p$ 是素数，所以 $\gcd(k,p)=1$。
+由裴蜀定理，存在整数 $u,v$ 使得
+\[uk + vp = 1\]
+两边取模 $p$，得到
+\[uk \equiv 1 \pmod{p}\]
+因此 $u \mod p$ 就是 $k$ 在 $\mathbb{Z}_p$ 中的乘法逆元。 $\square$
+
+\paragraph*{证法 2：映射角度}
+也可以从映射角度理解这一点。考虑 $\varphi_k: \mathbb{Z}_p \to \mathbb{Z}_p$，$\varphi_k(a) = k \cdot_p a$。
+若 $k \cdot_p a = k \cdot_p b$，则 $k(a - b) \equiv 0 \pmod{p}$。
+因为 $\gcd(k, p) = 1$，所以 $p \mid (a - b)$，即 $a \equiv b \pmod{p}$。
+所以 $\varphi_k$ 是单射；而 $\mathbb{Z}_p$ 是有限集，单射必为满射。
+特别地，$1$ 有原像，即存在 $k^{-1}$ 使得 $k \cdot_p k^{-1} = 1$。 $\square$
+
+\paragraph*{两种证法的比较}
+这两种证法揭示了同一个事实的不同侧面：
+- 证法 1 用裴蜀定理直接构造逆元，给出了逆元的具体表达式（$u \mod p$）。
+- 证法 2 用映射的角度理解逆元的存在性，没有给出具体表达式，但揭示了逆元存在性的本质：$\varphi_k$ 是双射。
+
+两种证法都依赖于 $\gcd(k, p) = 1$ 这个条件，也就是 $p$ 是素数。
+如果 $p$ 不是素数，可能存在 $k$ 使得 $\gcd(k, p) > 1$，此时 $\varphi_k$ 不是单射，逆元可能不存在。
+这解释了为什么素数条件是必要的。
+
+\paragraph*{更一般的有限域}
+$\mathbb{Z}_p$ 只是有限域的一种。更一般地：
+
+\textbf{定理}：对任意素数 $p$ 和正整数 $d$，存在恰好 $p^d$ 个元素的有限域（在同构意义下唯一）。
+
+例如，$\mathbb{F}_4$（4 个元素的有限域）可以构造如下：
+取 $\mathbb{F}_2 = \{0, 1\}$ 上的不可约多项式 $f(x) = x^2 + x + 1$。
+设 $\alpha$ 是 $f$ 的一个根，则 $\mathbb{F}_4 = \mathbb{F}_2(\alpha) = \{0, 1, \alpha, \alpha + 1\}$。
+
+\paragraph*{观察}
+这个例子有什么特别之处？
+首先，它展示了如何用不可约多项式构造有限域——这与我们之前用不可约多项式构造无限域的方法完全一致。
+其次，它揭示了有限域的一个重要特征：有限域的元素个数必须是素数的幂。
+
+这个例子与前面的 $\mathbb{Q}(\sqrt[3]{2})$ 和 $\mathbb{Q}(\sqrt{2}, \sqrt{3})$ 有什么联系？
+三者都是通过添加代数数来构造域，但有限域的构造有一个关键区别：基域本身是有限的（$\mathbb{F}_2$ 只有两个元素）。
+这说明域的构造方法是通用的，但具体结果依赖于基域的性质。
+
+这个例子还暗示了一个更一般的现象：有限域的结构完全由元素个数决定。
+我们后面讲有限域理论的时候会专门研究这个结论（有限域的分类定理）。
+
+\subsection*{课堂问题参考解答}
+
+\begin{exercise}\label{ex:ans-field-what-is-field}
+\hypertarget{ans:field-what-is-field}{}
+\textbf{用自己的话说：什么是域？}
+
+域就是一个集合，配上两种运算（加法和乘法），使得：
+\begin{itemize}
+    \item 加法"表现良好"：能加、能减、有零元、可交换
+    \item 乘法"表现良好"：非零元素能乘、能除、有单位元、可交换
+    \item 两种运算"相处融洽"：分配律把它们连起来
+\end{itemize}
+一句话：域 = 能做四则运算的集合。
+
+\hyperlink{q:field-what-is-field}{返回问题}
+\end{exercise}
+
+\begin{exercise}\label{ex:ans-no-distributive-law}
+\hypertarget{ans:no-distributive-law}{}
+\textbf{如果去掉分配律，会怎样？}
+
+没有分配律，加法和乘法就是两个独立的运算，无法互动。
+你无法展开 $(a+b)(c+d)$，无法证明 $0 \cdot a = 0$，无法做任何代数运算。
+\textbf{分配律是连接两种运算的桥梁}——没有它，域就退化为两个不相关的群。
+
+\hyperlink{q:no-distributive-law}{返回问题}
+\end{exercise}
+
+\begin{exercise}\label{ex:ans-reducible-polynomial}
+\hypertarget{ans:reducible-polynomial}{}
+\textbf{如果 $f$ 可约，会怎样？}
+
+要先分清两个对象。
+
+如果说的是商环构造 $\mathbb{Q}[x]/(f)$，那么 $f$ 可约时通常会出现零因子。
+例如 $f(x)=x^2-1=(x-1)(x+1)$，在 $\mathbb{Q}[x]/(f)$ 中：
+\[(x-1)(x+1)=0,\]
+但 $x-1$ 和 $x+1$ 本身都不是零元，所以这个商环不是域。
+
+如果 $\alpha$ 已经在某个扩域里，$\mathbb{Q}(\alpha)$ 按定义是包含 $\mathbb{Q}$ 和 $\alpha$ 的最小域，它当然还是域。
+真正需要不可约性的地方是：用 $f$ 做商环构造时，$\mathbb{Q}[x]/(f)$ 是域当且仅当 $f$ 不可约；用 $\deg f$ 以下的多项式唯一表示元素时，$f$ 应该取 $\alpha$ 的最小多项式。
+
+\hyperlink{q:reducible-polynomial}{返回问题}
+\end{exercise}
+
+\begin{exercise}\label{ex:ans-p-not-prime}
+\hypertarget{ans:p-not-prime}{}
+\textbf{如果 $p$ 不是素数，会怎样？}
+
+以 $\mathbb{Z}_6 = \{0,1,2,3,4,5\}$ 为例。
+$2 \cdot 3 = 6 \equiv 0 \pmod{6}$，但 $2 \neq 0$ 且 $3 \neq 0$。
+这说明 $\mathbb{Z}_6$ 有零因子——不是域！
+\textbf{素数条件保证了每个非零元素都与 $p$ 互素，从而有逆元。}
+
+\hyperlink{q:p-not-prime}{返回问题}
+\end{exercise}
+
+\section{域的同态}\label{sec:field-homomorphism}
+
+本节的核心问题只有一个：\textbf{两个域之间如何建立"保持结构"的映射？}
+在第一节中，我们已经见到了多种域——$\mathbb{Q}$、$\mathbb{R}$、$\mathbb{C}$、$\mathbb{Q}(\sqrt[3]{2})$、$\mathbb{Q}(\sqrt{2},\sqrt{3})$、$\mathbb{Z}_p$。
+一个自然的问题是：这些域之间有什么关系？比如，$\mathbb{R}$ 包含 $\mathbb{Q}$，$\mathbb{C}$ 包含 $\mathbb{R}$——"包含"是不是一种保持运算的映射？
+更一般地，任意两个域之间，能否建立一个映射，把其中一个域的元素和运算忠实地"翻译"到另一个域里？
+
+\subsection{域同态的定义与基本性质}
+
+在给出正式定义之前，可以先问自己：如果要在两个域之间做"翻译"，这个翻译器至少应该做到什么？
+它应该保持四种结构：加法单位元（$0$）、乘法单位元（$1$）、加法运算、乘法运算。
+这四条合起来，正好保证了"四则运算全部保持"。
+
+\begin{definition}[域同态]\label{def:field-homomorphism}
+设 $F$ 和 $E$ 是两个域。映射 $\varphi: F \to E$ 称为\textbf{域同态}，如果满足以下条件：
+\begin{enumerate}
+    \item $\varphi(0_F) = 0_E$——加法单位元映射到加法单位元
+    \item $\varphi(1_F) = 1_E$——乘法单位元映射到乘法单位元
+    \item $\varphi(a + b) = \varphi(a) + \varphi(b)$ 对所有 $a, b \in F$——保持加法
+    \item $\varphi(ab) = \varphi(a)\varphi(b)$ 对所有 $a, b \in F$——保持乘法
+\end{enumerate}
+\end{definition}
+
+这四条看似简单，但合在一起力量很大。直觉：域同态就是"保持所有四则运算"的映射——加、减、乘、除全部被原样搬运。
+减法和除法不需要单独列出，因为它们可以从加法和乘法推导出来（减法是加逆元，除法是乘逆元）。
+
+域同态有一个在群论和环论中都不成立的强性质：
+
+\begin{theorem}[域同态必为单射]\label{thm:field-hom-injective}
+设 $\varphi: F \to E$ 是域同态，则 $\varphi$ 是单射。
+\end{theorem}
+
+证明的策略是反证法：假设 $\varphi$ 不是单射，则存在两个不同元素映射到同一个值，等价于存在非零元素被映射到 $0$。
+我们利用这个非零元素的乘法逆，导出 $1_F$ 被映射到 $0_E$ 的矛盾。
+
+设 $a \in F$，$a \neq 0_F$，且 $\varphi(a) = 0_E$。因为 $F$ 是域，$a$ 有乘法逆元 $a^{-1}$。
+考虑 $\varphi(1_F)$：
+\[
+\varphi(1_F) = \varphi(a \cdot a^{-1}) = \varphi(a) \cdot \varphi(a^{-1})
+= 0_E \cdot \varphi(a^{-1}) = 0_E
+\]
+但由域同态的定义第 2 条，$\varphi(1_F) = 1_E$，而域中 $1_E \neq 0_E$（第一章基本性质），矛盾。
+因此不存在非零的 $a$ 使得 $\varphi(a) = 0_E$，所以 $\varphi$ 是单射。$\square$
+
+这个证明的核心只用到了一个事实：域中每个非零元素都有乘法逆。
+如果把"域"换成"环"，这个结论就不成立了——例如整数环 $\mathbb{Z}$ 到 $\mathbb{Z}/6\mathbb{Z}$ 的典范投影是同态，但不是单射。
+我们后面讲环论的时候会看到，环同态的核可以很复杂，但域同态的核只能是 $\{0\}$。
+
+域同态必为单射这个事实有一个重要的推论：只要两个域之间存在同态，定义域就可以看作值域的"子集"（更准确地说，$\varphi(F)$ 是 $E$ 的子域，且 $\varphi$ 给出 $F$ 到 $\varphi(F)$ 的同构）。
+这意味着我们不关心域同态的"核"或"像"——因为核永远是平凡的，像永远是同构于定义域的。
+因此，域论中我们不研究同态的核与像，而是转而研究更基本的对象：\textbf{子域}和\textbf{扩张}。
+
+\begin{definition}[子域]\label{def:subfield}
+设 $F$ 是域，$E \subseteq F$。若 $E$ 在 $F$ 的运算下也构成域，则称 $E$ 是 $F$ 的\textbf{子域}，$F$ 是 $E$ 的\textbf{扩域}（或扩张）。
+\end{definition}
+
+一个子集是否为子域，只需验证三条：包含 $0$ 和 $1$，且对加法、乘法、取负、取逆（非零元）封闭。
+实际上，由于子集继承了 $F$ 的结合律、交换律和分配律，封闭性就是唯一的障碍。
+
+同态加上双射就是同构。域同构的概念和群同构、环同构一样：存在互逆的同态。
+
+自同构是域到自身的同构。关于自同构，有一个值得注意的构造：
+
+\begin{proposition}[自同构的不动域]\label{prop:fixed-field}
+设 $\sigma: F \to F$ 是域的自同构。则 $\sigma$ 的所有不动点构成的集合
+\[
+F^\sigma = \{a \in F \mid \sigma(a) = a\}
+\]
+是 $F$ 的子域，称为 $\sigma$ 的\textbf{不动域}。
+\end{proposition}
+
+验证只需要逐条检查封闭性：$0$ 和 $1$ 显然不动（同态保持 $0$ 和 $1$）；若 $a, b$ 不动，则 $\sigma(a+b) = \sigma(a)+\sigma(b) = a+b$，加法不动；乘法、取负、取逆同理。
+
+一个熟悉的例子：复数域 $\mathbb{C}$ 上的复共轭 $\sigma(z) = \bar{z}$ 是一个自同构。
+它的不动点恰好是满足 $\bar{z} = z$ 的复数，即实数轴 $\mathbb{R}$。
+因此 $\mathbb{C}^\sigma = \mathbb{R}$——实数域作为复数域中"共轭对称"的不动域出现。
+
+这个例子暗示了一个更一般的现象：自同构的丰富程度与子域结构密切相关——自同构越多，不动域越小。
+我们后面讲 Galois 理论的时候，这个对应关系将是核心洞察：域的扩张的对称性（Galois 群）与中间域之间有一一对应。
+
+\hypertarget{q:field-homomorphism-kernel}{}
+\medskip
+\noindent\textbf{思考：域同态必为单射——这个证明用到域的哪个区别于环的关键性质？如果把"域"换成"整环"，结论还成立吗？}（\hyperlink{ans:field-homomorphism-kernel}{跳转到解答}。）
+\medskip
+
+\subsection{同态的存在性与不存在性}
+
+上面我们知道了域同态如果存在就一定是嵌入。
+但域同态是否一定存在？答案是否定的。并非任意两个域之间都有同态。
+
+一个具体的反例：$\mathbb{Q}(\sqrt{2})$ 和 $\mathbb{Q}(\sqrt{3})$ 之间不存在域同态。
+
+\textbf{为什么？}用反证法。假设存在域同态 $\varphi: \mathbb{Q}(\sqrt{2}) \to \mathbb{Q}(\sqrt{3})$。
+因为 $\varphi$ 保持加法和乘法，它必须在 $\mathbb{Q}$ 上是恒等映射（$\varphi(1)=1$，然后由加法和除法扩展到整个 $\mathbb{Q}$）。
+现在考虑 $\varphi(\sqrt{2})$。设 $\varphi(\sqrt{2}) = u \in \mathbb{Q}(\sqrt{3})$，则
+\[
+u^2 = \varphi(\sqrt{2})^2 = \varphi((\sqrt{2})^2) = \varphi(2) = 2
+\]
+所以 $u^2 = 2$ 必须在 $\mathbb{Q}(\sqrt{3})$ 中有解。但 $\mathbb{Q}(\sqrt{3})$ 中的元素形如 $a + b\sqrt{3}$（$a, b \in \mathbb{Q}$），
+$(a + b\sqrt{3})^2 = (a^2 + 3b^2) + 2ab\sqrt{3}$。令它等于 $2$，则 $2ab = 0$ 且 $a^2 + 3b^2 = 2$。
+若 $b = 0$，则 $a^2 = 2$，$a = \pm\sqrt{2} \notin \mathbb{Q}$；若 $a = 0$，则 $3b^2 = 2$，$b = \pm\sqrt{2/3} \notin \mathbb{Q}$。
+两种情形都不可能。因此 $\varphi(\sqrt{2})$ 不存在，矛盾。$\square$
+
+这个反例揭示了域同态存在性的一个深刻约束：一个域的代数元（如 $\sqrt{2}$ 满足 $x^2 - 2 = 0$）在同态下的像，必须满足同一个多项式方程。
+因此，域同态的存在性取决于"多项式的根在不在目标域里"。
+这个观察指向 Galois 理论的核心问题：多项式的根在扩域中如何分布？我们后面会回到这个问题。
+
+接下来看一个正面的结构性结果：
+
+\begin{theorem}[素域的无真子域性质]\label{thm:no-proper-subfield}
+$\mathbb{Q}$ 和 $\mathbb{Z}_p$（$p$ 为素数）没有真子域。即，它们的子域只能是自身。
+\end{theorem}
+
+这个定理的两个部分需要两种完全不同的证明策略。
+
+\textbf{$\mathbb{Q}$ 的情形。}设 $E \subseteq \mathbb{Q}$ 是一个子域。由子域的定义，$1 \in E$。
+由加法封闭，$1 + 1 = 2 \in E$，$2 + 1 = 3 \in E$，依此类推，所有自然数都在 $E$ 中。
+由减法封闭（加法逆元），所有整数 $\mathbb{Z} \subseteq E$。
+由除法封闭（乘法逆元），对任意 $a, b \in \mathbb{Z}$，$b \neq 0$，有 $a/b \in E$。
+这正是全部有理数，所以 $E = \mathbb{Q}$。$\square$
+
+这个证明只用到了四则运算封闭性——$\mathbb{Q}$ 本身就是由 $1$ 通过加减乘除"生成"出来的。
+
+\textbf{$\mathbb{Z}_p$ 的情形。}这里需要引入一个重要的视角。
+
+\begin{lemma}[扩域是线性空间]\label{lem:extension-vector-space}
+若 $F$ 是 $E$ 的扩域，则 $F$ 可以看作 $E$ 上的线性空间。
+\end{lemma}
+
+这个引理为什么成立？线性空间的 8 条公理——向量加法的结合律、交换律、零元、负元，以及标量乘法的各种性质——全部来自 $F$ 的域运算。
+具体来说，$F$ 的加法群就是"向量加法"，$E$ 中的元素作为"标量"乘以 $F$ 中的元素（用的就是 $F$ 的乘法）。
+读者如果已经学过线性代数，可以逐条对照验证——每一条都能在域的公理中找到对应。
+
+现在回到 $\mathbb{Z}_p$ 的证明。设 $E \subseteq \mathbb{Z}_p$ 是一个子域。
+由引理，$\mathbb{Z}_p$ 是 $E$ 上的线性空间。因为 $\mathbb{Z}_p$ 只有 $p$ 个元素（有限），这个线性空间必然是有限维的。
+记维数为 $d = [\mathbb{Z}_p : E]$。
+
+在线性空间中，一旦取定了一组基，每个向量在这组基下的坐标表示是\textbf{唯一}的。
+取 $\mathbb{Z}_p$ 作为 $E$-线性空间的一组基 $\{v_1, \ldots, v_d\}$。
+$\mathbb{Z}_p$ 中的每个元素可以唯一表示为 $a_1 v_1 + \cdots + a_d v_d$，其中 $a_i \in E$。
+因此，$\mathbb{Z}_p$ 中的元素个数等于坐标向量的个数：每个坐标有 $\#E$ 种选择，共 $d$ 个坐标，所以
+\[
+\#\mathbb{Z}_p = (\#E)^d
+\]
+即 $p = (\#E)^d$。因为 $p$ 是素数，唯一的分解方式是 $\#E = p$ 且 $d = 1$，或者 $\#E = 1$ 且 $d = p$。
+但 $\#E = 1$ 意味着 $E = \{0\}$，不包含 $1$，不是子域。所以只能是 $\#E = p$，即 $E = \mathbb{Z}_p$。$\square$
+
+这里最关键的一步是"取定基后坐标表示唯一"——这是线性代数最基本的事实之一，但在域论中发挥了关键的计数作用。
+正是这条性质把"维数"和"元素个数"联系了起来。
+
+\textbf{两种证明的比较。}同一个结论（无真子域），$\mathbb{Q}$ 的证明只用了代数生成——由 $1$ 出发通过四则运算填满整个域；
+$\mathbb{Z}_p$ 的证明则需要搬出线性代数的维数论证。
+这暗示了特征 $0$ 和特征 $p$ 的域在结构上的深层差异：特征 $0$ 的域必然包含无穷多个由 $1$ 生成的元素（$\mathbb{N} \subseteq F$），而特征 $p$ 的域中 $1$ 的加法生成只给出 $p$ 个元素。
+我们将在下一节"域的特征"中系统地研究这个差异。
+
+\hypertarget{q:q-zp-no-proper-subfield}{}
+\medskip
+\noindent\textbf{思考：$\mathbb{Q}$ 和 $\mathbb{Z}_p$ 无真子域的证明用了完全不同的策略——这暗示了特征 $0$ 和特征 $p$ 的域有什么本质区别？}（\hyperlink{ans:q-zp-no-proper-subfield}{跳转到解答}。）
+\medskip
+
+\subsection{域上的代数（$K$-代数）}
+
+在 $\mathbb{Z}_p$ 无真子域的证明中，我们用到了"扩域可以看作基域的线性空间"这个视角。
+这个视角值得单独拿出来展开，因为它建立了域论和线性代数之间的桥梁——而读者已经学过线性代数，这是可以利用的已有知识。
+
+扩域 $F/E$ 不仅是一个 $E$-线性空间，它还有乘法。
+如果我们选定了 $F$ 作为 $E$-线性空间的一组基，那么基向量之间的乘法完全决定了整个 $F$ 的乘法结构。
+这是因为任意两个元素的乘积可以展开为基向量的乘积，而基向量的乘积又可以写回基的线性组合。
+这个结构——"线性空间 + 基的乘法表"——称为 $E$ 上的\textbf{代数}（algebra）。
+
+一个最典型的例子：复数域 $\mathbb{C}$ 可以看作 $\mathbb{R}$ 上的二维代数。
+取基 $\{1, i\}$，加法就是分量相加（和 $\mathbb{R}^2$ 一样），但乘法由基的乘法表决定：
+\[
+1 \cdot 1 = 1, \quad 1 \cdot i = i, \quad i \cdot 1 = i, \quad i \cdot i = -1
+\]
+这个乘法表把 $\mathbb{R}^2$ 变成了 $\mathbb{C}$。
+
+注意，作为 $\mathbb{R}$-线性空间，$\mathbb{C}$ 和 $\mathbb{R}^2$ 没有任何区别——它们都是二维实向量空间。
+区别仅仅在于乘法：$\mathbb{R}^2$ 上可以定义各种乘法（比如逐分量乘法），但只有特定的乘法表（$i^2 = -1$）才能让这个代数结构成为域。
+事实上，如果我们把乘法表改成 $i^2 = 1$，得到的代数不再是域（会出现零因子：$(1+i)(1-i) = 0$）。
+如果我们把基增加到四维并适当定义乘法表，就得到了四元数 $\mathbb{H}$——一个非交换的代数，仍然不是域。
+
+这个视角在 Galois 理论中会反复出现：域的扩张次数就是线性空间的维数，而扩域中的乘法结构则反映了 Galois 群的作用。
+
+\subsection*{课堂问题参考解答}
+
+\begin{exercise}\label{ex:ans-field-homomorphism-kernel}
+\hypertarget{ans:field-homomorphism-kernel}{}
+\textbf{域同态必为单射——这个证明用到域的哪个区别于环的关键性质？}
+
+证明的核心只用到了一个事实：域中每个非零元素都有乘法逆。
+在证明中，我们设 $\varphi(a) = 0$ 但 $a \neq 0$，然后通过 $a^{-1}$ 导出 $\varphi(1) = 0$ 的矛盾。
+这一步用到了乘法逆的存在性，而环中没有这个保证。
+
+如果把"域"换成"整环"，证明会怎样？
+整环也没有零因子，但整环不要求非零元有乘法逆。
+没有乘法逆，$a \neq 0$ 且 $\varphi(a) = 0$ 就不一定推出矛盾——$\mathbb{Z} \to \mathbb{Z}/6\mathbb{Z}$ 中 $6$ 被映射为 $0$ 但 $6 \neq 0$，这就是反例。
+所以整环上的同态不必为单射。
+
+关键区别：域 = 每个非零元有逆，所以核只能平凡；整环 = 无零因子，但非零元可能没有逆，所以核可以不平凡。
+
+\hyperlink{q:field-homomorphism-kernel}{返回问题}
+\end{exercise}
+
+\begin{exercise}\label{ex:ans-q-zp-no-proper-subfield}
+\hypertarget{ans:q-zp-no-proper-subfield}{}
+\textbf{$\mathbb{Q}$ 和 $\mathbb{Z}_p$ 无真子域的证明用了完全不同的策略——这暗示了什么本质区别？}
+
+$\mathbb{Q}$ 的证明用代数生成：从 $1$ 出发，通过加减乘除生成所有有理数。这个策略之所以有效，是因为 $\mathbb{Q}$ 里有无穷多个由 $1$ 生成的不同元素（$1, 2, 3, \ldots$ 全不同）。
+
+$\mathbb{Z}_p$ 的证明用线性代数+计数：$1$ 的加法生成只给出 $p$ 个元素，之后循环了。所以代数生成这条路走不通——必须引入"扩域是线性空间"这个额外结构，用维数做计数论证。
+
+本质区别：
+\begin{itemize}
+    \item 特征 $0$：$1$ 的加法生成是无限的——域中必然包含 $\mathbb{Z}$ 的副本，由此嵌入整个 $\mathbb{Q}$。
+    \item 特征 $p$：$1$ 的加法生成只有 $p$ 个元素，构成素域，进一步扩张才得到更大的域。
+\end{itemize}
+这也解释了为什么特征 $0$ 的域必然是无限的，而特征 $p$ 的域可以有有限域（如 $\mathbb{F}_{p^d}$）——特征 $p$ 中 $1$ 的生成是有限循环的，不强制域无限。
+
+\hyperlink{q:q-zp-no-proper-subfield}{返回问题}
+\end{exercise}
+
+\section{域的特征}\label{sec:field-characteristic}
+
+本节的核心问题只有一个：\textbf{能否用一个不变量来区分"像 $\mathbb{Q}$ 一样的域"和"像 $\mathbb{Z}_p$ 一样的域"？}
+
+回忆一下：在 $\mathbb{Q}$ 中，把 $1$ 加任意多次，永远不会回到 $0$。
+但在 $\mathbb{Z}_p$ 中，把 $1$ 加 $p$ 次就回到 $0$ 了。
+这两种行为完全不同——前者是无穷的，后者是有限循环的。
+我们需要一个严格的不变量来把这种差异说清楚，并且研究它如何影响域的结构。
+
+\subsection{特征的定义}
+
+为了严格地讨论"把 $1$ 加 $n$ 次"，我们需要把这个操作定义为一个映射。
+
+对任意域 $F$，定义映射 $N: \mathbb{N} \to F$ 如下（用归纳法）：
+\[
+N(0) = 0_F, \qquad N(n+1) = N(n) + 1_F
+\]
+直观上，$N(n)$ 就是把域中的乘法单位元 $1_F$ 连加 $n$ 次的结果：$N(n) = \underbrace{1_F + 1_F + \cdots + 1_F}_{n \text{ 次}}$。
+
+严格定义使用了归纳法，但后续的使用中我们只需要知道 $N(n)$ 就是"$n$ 个 $1_F$ 相加"即可。
+
+这个映射有一个关键的性质：它不仅保持加法，还保持乘法和减法（在自然数允许的范围内）。
+
+\begin{proposition}[$N$ 的保持性质]\label{prop:N-properties}
+对任意 $m, n \in \mathbb{N}$：
+\begin{enumerate}
+    \item $N(m + n) = N(m) + N(n)$
+    \item $N(mn) = N(m) \cdot N(n)$
+    \item 若 $m \geq n$，则 $N(m - n) = N(m) - N(n)$
+\end{enumerate}
+\end{proposition}
+
+这三条的证明都使用了对 $n$ 的归纳法。
+
+\textbf{加法性质。}固定 $m$，对 $n$ 归纳。
+$n = 0$ 时 $N(m + 0) = N(m) = N(m) + 0_F = N(m) + N(0)$，成立。
+假设对 $n$ 成立，则
+\[
+N(m + (n+1)) = N((m+n)+1) = N(m+n) + 1_F \quad\text{（$N$ 的递推定义）}
+\]
+\[
+= (N(m) + N(n)) + 1_F \quad\text{（归纳假设）}
+= N(m) + (N(n) + 1_F) = N(m) + N(n+1)
+\]
+其中用到了加法结合律。
+
+\textbf{乘法性质。}同样固定 $m$，对 $n$ 归纳。
+$n = 0$ 时 $N(m \cdot 0) = N(0) = 0_F$，而 $N(m) \cdot N(0) = N(m) \cdot 0_F = 0_F$（零乘性质），成立。
+假设对 $n$ 成立，则
+\[
+N(m(n+1)) = N(mn + m) = N(mn) + N(m) \quad\text{（保加法，刚证过）}
+\]
+\[
+= N(m)N(n) + N(m) \quad\text{（归纳假设）}
+= N(m)(N(n) + 1_F) = N(m)N(n+1)
+\]
+其中用到了分配律把 $N(m)$ 提出来。
+
+\textbf{减法性质。}当 $m \geq n$ 时，由加法性质 $N(m) = N((m-n)+n) = N(m-n) + N(n)$，
+两边加上 $N(n)$ 的加法逆元 $-N(n)$，得 $N(m-n) = N(m) - N(n)$。
+
+有了 $N$ 映射，特征的定义就水到渠成了：
+
+\begin{definition}[域的特征]\label{def:characteristic}
+设 $F$ 是域，$N: \mathbb{N} \to F$ 如上定义。
+\begin{itemize}
+    \item 若 $N$ 是单射（即 $m \neq n$ 时 $N(m) \neq N(n)$），则称 $F$ 的\textbf{特征}为 $0$，记为 $\operatorname{char}(F) = 0$。
+    \item 否则，集合 $\{n \in \mathbb{N}^+ \mid N(n) = 0_F\}$ 非空，取其中的最小元 $p$，称 $F$ 的\textbf{特征}为 $p$，记为 $\operatorname{char}(F) = p$。
+\end{itemize}
+\end{definition}
+
+直觉很简单：特征就是"$1$ 加多少次等于 $0$"——如果加多少次都不等于 $0$，特征就是 $0$；否则特征就是第一次归零的次数。
+
+"$N$ 是单射"这个条件等价于说 $1_F, 2\cdot 1_F, 3\cdot 1_F, \ldots$ 全是不同的元素，永远不重复，当然也永远不会等于 $0_F$。
+这和直观上的理解（"加多少次都不归零"）完全吻合。
+
+\hypertarget{q:char-definition-intuition}{}
+\medskip
+\noindent\textbf{思考："$N$ 是单射"等价于"特征为 $0$"——直观上"单射"意味着什么？用一句话说清楚特征的定义，不要用公式。}（\hyperlink{ans:char-definition-intuition}{跳转到解答}。）
+\medskip
+
+\subsection{特征必为素数}
+
+如果 $N$ 不是单射，特征是一个正整数 $p$。这个 $p$ 不能是任意的正整数——它必须是素数。
+
+\begin{proposition}[特征必为素数]\label{prop:char-prime}
+若 $\operatorname{char}(F) \neq 0$，则 $\operatorname{char}(F)$ 必为素数。
+\end{proposition}
+
+证明的策略是反证法。假设 $\operatorname{char}(F) = p = mn$，其中 $m, n > 1$ 且 $m, n < p$。
+由于 $p$ 是使 $N(p) = 0$ 的最小正整数，我们知道 $N(m) \neq 0$ 且 $N(n) \neq 0$。
+但利用 $N$ 保乘法：
+\[
+N(m) \cdot N(n) = N(mn) = N(p) = 0_F
+\]
+域中没有零因子，所以 $N(m) \cdot N(n) = 0_F$ 意味着 $N(m) = 0_F$ 或 $N(n) = 0_F$。
+但这与 $m, n < p$（$p$ 是最小正整数使得 $N(p)=0$）矛盾。因此 $p$ 不能分解为两个大于 $1$ 的正整数的乘积，即 $p$ 是素数。$\square$
+
+注意这个证明的关键一步："域中没有零因子"——$ab = 0$ 意味着 $a = 0$ 或 $b = 0$。
+如果把"域"换成更一般的环，这个条件不再成立。
+例如 $\mathbb{Z}/6\mathbb{Z}$ 中，$2 \cdot 3 = 6 \equiv 0$，但 $2 \neq 0$ 且 $3 \neq 0$。
+相应地，$\mathbb{Z}/6\mathbb{Z}$（作为环）的加法单位元 $1$ 连加 $6$ 次首次归零，所以（环的）特征是 $6$——不是素数。
+这说明"特征必为素数"是域特有的性质，根源在于域没有零因子。
+
+\hypertarget{q:char-prime-domain}{}
+\medskip
+\noindent\textbf{思考：把"域"换成"整环"（无零因子的交换环），特征必为素数的结论还成立吗？如果成立，为什么？如果不成立，$\mathbb{Z}/6\mathbb{Z}$ 的问题出在哪？}（\hyperlink{ans:char-prime-domain}{跳转到解答}。）
+\medskip
+
+\subsection{素域嵌入定理}
+
+我们已经知道 $\mathbb{Q}$ 和 $\mathbb{Z}_p$ 没有真子域——它们是"最小的"域。
+一个自然的问题是：每个域里面是不是都"藏着"一个 $\mathbb{Q}$ 或 $\mathbb{Z}_p$？
+答案是肯定的，而且证明恰好用到了刚定义的 $N$ 映射。
+
+\begin{theorem}[素域嵌入定理]\label{thm:prime-field-embedding}
+设 $F$ 是域。
+\begin{enumerate}
+    \item 若 $\operatorname{char}(F) = 0$，则存在单同态 $\mathbb{Q} \hookrightarrow F$。
+    \item 若 $\operatorname{char}(F) = p > 0$，则存在单同态 $\mathbb{Z}_p \hookrightarrow F$。
+\end{enumerate}
+\end{theorem}
+
+\textbf{特征 $0$ 的情形。}因为 $\operatorname{char}(F) = 0$，$N$ 是单射，所以 $N$ 给出了 $\mathbb{N}$ 到 $F$ 的嵌入。
+进一步，对任意 $m \in \mathbb{N}$，$N(m)$ 的加法逆元 $-N(m)$ 在 $F$ 中存在；这允许我们把嵌入扩展到 $\mathbb{Z}$：
+定义
+\[\tilde{N}(k) = \begin{cases} N(k) & \text{若 } k \geq 0 \\ -N(-k) & \text{若 } k < 0 \end{cases}\]
+验证 $\tilde{N}$ 保持加法和乘法：以加法为例，对 $m, n \geq 0$，$\tilde{N}(m + n) = N(m + n) = N(m) + N(n) = \tilde{N}(m) + \tilde{N}(n)$；
+对 $m < 0$，$n \geq 0$ 且 $|m| \leq n$，$\tilde{N}(m + n) = N(n - |m|) = N(n) - N(|m|) = \tilde{N}(n) + \tilde{N}(m)$（用到 $N$ 保减法）；
+其余情形类似。乘法的验证类似，关键是 $(-N(a))(-N(b)) = N(a)N(b)$（负负得正）。
+$\tilde{N}$ 是单射：若 $\tilde{N}(k) = 0_F$，则 $N(|k|) = 0_F$ 或 $-N(|k|) = 0_F$，都推出 $N(|k|) = 0_F$，但 $\operatorname{char}(F) = 0$ 意味着只有 $|k| = 0$ 时 $N(|k|) = 0_F$，所以 $k = 0$。
+因此 $\tilde{N}: \mathbb{Z} \to F$ 是单射环同态。
+
+再进一步扩展到 $\mathbb{Q}$。定义
+\[\Phi\!\left(\frac{a}{b}\right) = \tilde{N}(a) \cdot \big(\tilde{N}(b)\big)^{-1}, \quad a, b \in \mathbb{Z},\; b \neq 0\]
+因为 $\tilde{N}$ 是单射，$b \neq 0$ 推出 $\tilde{N}(b) \neq 0_F$，逆元存在。
+$\Phi$ 是良定义的：若 $a/b = c/d$，则 $ad = bc$，从而 $\tilde{N}(a)\tilde{N}(d) = \tilde{N}(b)\tilde{N}(c)$，即 $\tilde{N}(a)\tilde{N}(b)^{-1} = \tilde{N}(c)\tilde{N}(d)^{-1}$。
+$\Phi$ 保持加法和乘法（直接验证），且是单射（$\Phi(a/b) = 0$ 推出 $\tilde{N}(a) = 0$，从而 $a = 0$）。
+这样就得到了 $\mathbb{Q} \hookrightarrow F$。
+
+\textbf{特征 $p$ 的情形。}$N(p) = 0_F$，且 $p$ 是使这个成立的最小正整数。
+$N$ 在 $\{0, 1, 2, \ldots, p-1\}$ 上的限制给出了一个到 $F$ 的单射，且像集恰好是 $\{0_F, 1_F, 2\cdot 1_F, \ldots, (p-1)\cdot 1_F\}$。
+这 $p$ 个元素的加法（模 $p$）和乘法（模 $p$）结构与 $\mathbb{Z}_p$ 完全相同，因此给出了 $\mathbb{Z}_p \hookrightarrow F$。$\square$
+
+这个定理的一个直接推论是：
+
+\begin{corollary}[域的基本图景]\label{cor:prime-field}
+每个域都可以看作 $\mathbb{Q}$ 或某个 $\mathbb{Z}_p$ 的扩张。$\mathbb{Q}$ 和 $\mathbb{Z}_p$ 称为\textbf{素域}（prime field）——它们是不能进一步缩小的域。
+\end{corollary}
+
+直觉：素域就是域的"原子"。正如同每个自然数可以分解为素数的乘积，每个域都生长在一个素域之上——要么是 $\mathbb{Q}$（特征 $0$），要么是 $\mathbb{Z}_p$（特征 $p$）。
+这个图景是域论最基础的框架：素域 + 一系列代数扩张 = 所有域。
+我们后面讲 Galois 理论的时候，正是在这个图景上研究扩张的对称性。
+
+\hypertarget{q:prime-field-analogy}{}
+\medskip
+\noindent\textbf{思考：为什么说 $\mathbb{Q}$ 和 $\mathbb{Z}_p$ 在域论中的地位类似于素数在整数中的地位？}（\hyperlink{ans:prime-field-analogy}{跳转到解答}。）
+\medskip
+
+\subsection{同态保持特征}
+
+素域嵌入定理说明，一个域的特征决定了它"底下"的素域是谁。
+由此可以立刻推出：域同态必须保持特征。
+
+\begin{corollary}[同态保持特征]\label{cor:hom-preserves-char}
+若存在域同态 $\varphi: E \to F$，则 $\operatorname{char}(E) = \operatorname{char}(F)$。
+\end{corollary}
+
+证明很短。$\varphi$ 保持 $1$（$\varphi(1_E) = 1_F$），也保持加法。
+因此对任意 $n \in \mathbb{N}$，$\varphi(N_E(n)) = N_F(n)$。
+如果 $N_E(p) = 0_E$，则 $N_F(p) = \varphi(N_E(p)) = \varphi(0_E) = 0_F$。
+反之亦然（因为 $\varphi$ 是单射，$N_F(p) = 0_F$ 推出 $N_E(p) = 0_E$）。
+所以 $E$ 和 $F$ 中"$1$ 加多少次归零"的答案一样，特征相同。
+
+这个推论的几何图景是：两个域之间只要有同态，它们就共享同一个素域——特征不可能不同。
+
+\subsection{Frobenius 自同构}
+
+在特征 $p$ 的域中，有一个让人初见时"觉得不对"的公式：
+
+\begin{proposition}[特征 $p$ 域中的二项式定理]\label{prop:frobenius-binomial}
+设 $\operatorname{char}(F) = p$（素数），则对任意 $x, y \in F$，
+\[
+(x + y)^p = x^p + y^p
+\]
+\end{proposition}
+
+这个公式看起来像是把"加法的 $p$ 次方"变成了"$p$ 次方的加法"——像是一种"加法性"。
+但实际上，它只是二项式系数的偶然。
+
+用二项式定理展开：
+\[
+(x + y)^p = \sum_{k=0}^{p} \binom{p}{k} x^{p-k} y^k
+\]
+当 $k = 0$ 时系数为 $\binom{p}{0} = 1$，当 $k = p$ 时系数为 $\binom{p}{p} = 1$。
+对 $1 \leq k \leq p-1$，组合数公式给出：
+\[
+\binom{p}{k} = \frac{p(p-1)\cdots(p-k+1)}{k!}
+\]
+分子含有因子 $p$，而分母 $k!$ 中每个因子都小于 $p$（因此与 $p$ 互素），所以 $\binom{p}{k}$ 是 $p$ 的倍数。
+在特征 $p$ 的域中，$p \cdot 1_F = 0_F$，因此所有中间项的系数全部归零。
+只剩下首尾两项：$x^p + y^p$。$\square$
+
+这个观察说明中间项消失不是因为什么深刻的代数结构，而纯粹是因为 $p$ 是素数且二项式系数恰好被 $p$ 整除。
+对于一般的指数 $n$（非素数），没有这个现象。
+
+基于这个公式，可以定义一个重要的映射：
+
+\begin{definition}[Frobenius 映射]\label{def:frobenius}
+设 $\operatorname{char}(F) = p$。定义映射 $\operatorname{Fr}: F \to F$ 为 $\operatorname{Fr}(x) = x^p$，称为 $F$ 的\textbf{Frobenius 映射}。
+\end{definition}
+
+逐条验证 Frobenius 映射的性质：
+\begin{itemize}
+    \item 保 $0$：$0^p = 0$（显然）
+    \item 保 $1$：$1^p = 1$（显然）
+    \item 保乘法：$(xy)^p = x^p y^p$（在任何交换环中都成立）
+    \item 保加法：刚证过的 $(x+y)^p = x^p + y^p$
+\end{itemize}
+因此 Frobenius 映射是域自同态（field endomorphism）——从域到自身的同态。
+
+注意：在一般的特征 $p$ 域中，Frobenius 只是自同态，不一定是自同构。
+例如，对于无限域 $\mathbb{F}_p(t)$（有理函数域），Frobenius 的像只包含 $p$ 次幂，不是满射。
+但在\textbf{有限域}中，任何单射必然也是满射（因为有限集上的单射是双射），所以我们之前已经知道域同态是单射，因此 Frobenius 在有限域上自动是自同构。
+
+Frobenius 自同构是有限域理论的基石之一，也是代数数论中 Frobenius 元素的来源。
+我们后面讲有限域分类的时候，会看到 Frobenius 映射如何生成有限域的整个 Galois 群。
+
+\hypertarget{q:frobenius-automorphism}{}
+\medskip
+\noindent\textbf{思考：Frobenius 映射只是域自同态，不一定是自同构。什么时候它才是自同构？为什么在有限域中一定是？}（\hyperlink{ans:frobenius-automorphism}{跳转到解答}。）
+\medskip
+
+\subsection*{课堂问题参考解答}
+
+\begin{exercise}\label{ex:ans-char-definition-intuition}
+\hypertarget{ans:char-definition-intuition}{}
+\textbf{"$N$ 是单射"等价于"特征为 $0$"——直观上"单射"意味着什么？}
+
+$N$ 是单射，意思是不同的自然数 $m \neq n$ 一定会给出不同的域元素 $N(m) \neq N(n)$。
+换句话说，把 $1$ 加一次、两次、三次……得到的结果全是不同的元素，永远不会重复，也永远不会回到 $0$。
+
+一句话总结特征的定义：特征就是"把 $1$ 反复加，多少次之后第一次回到 $0$"——如果不回到 $0$，特征就是 $0$。
+
+这个定义用"单射"而不直接用"永远不回 $0$"，是因为单射同时排除了两种情况：回到 $0$（$N(n)=N(0)$）和循环但不经过 $0$（$N(m)=N(n)$ 但 $m \neq n$）。
+不过在域中，$N$ 保减法可以证明：只要 $N(m) = N(n)$ 且 $m > n$，就必有 $N(m-n) = 0$，所以循环必然经过 $0$。
+因此两种表述在域中是等价的。
+
+\hyperlink{q:char-definition-intuition}{返回问题}
+\end{exercise}
+
+\begin{exercise}\label{ex:ans-char-prime-domain}
+\hypertarget{ans:char-prime-domain}{}
+\textbf{把"域"换成"整环"，特征必为素数的结论还成立吗？}
+
+结论仍然成立。证明中只用到了两个条件：
+\begin{enumerate}
+    \item $N$ 保乘法（在所有环中都成立，因为分配律）
+    \item 无零因子（整环的定义）
+\end{enumerate}
+反证法的推导完全一样：设 $\operatorname{char}(R) = mn$，则 $N(m)N(n) = N(mn) = 0$，无零因子推出 $N(m)=0$ 或 $N(n)=0$，与最小性矛盾。
+
+所以整环的特征也必为 $0$ 或素数。$\mathbb{Z}/6\mathbb{Z}$ 的特征是 $6$ 不是素数，原因正是它有零因子（$2 \cdot 3 \equiv 0$）——它不是整环。
+
+实际上，特征必为素数是"无零因子"的性质，不是"有乘法逆"的性质。域恰好两者都有，但证明只用了前者。
+
+\hyperlink{q:char-prime-domain}{返回问题}
+\end{exercise}
+
+\begin{exercise}\label{ex:ans-prime-field-analogy}
+\hypertarget{ans:prime-field-analogy}{}
+\textbf{为什么说 $\mathbb{Q}$ 和 $\mathbb{Z}_p$ 在域论中的地位类似于素数在整数中的地位？}
+
+有三层原因：
+\begin{itemize}
+    \item \textbf{不可再分}：素数不能再分解为更小的正整数（$>1$）的乘积；$\mathbb{Q}$ 和 $\mathbb{Z}_p$ 不能有更小的真子域。两者都是各自范畴中的"最小单位"。
+    \item \textbf{生成一切}：每个整数可以唯一分解为素数的乘积；每个域都可以看作某个素域（$\mathbb{Q}$ 或 $\mathbb{Z}_p$）的扩张——素域是"搭建"所有域的起点。
+    \item \textbf{分类基础}：整数按素因子分类；域按特征（即按下面的素域）分类为特征 $0$ 和特征 $p$ 两大类。不同特征的域之间不可能有同态（推论 \ref{cor:hom-preserves-char}），就像不同素数之间没有整除关系。
+\end{itemize}
+当然这个类比不能过度使用——域的扩张比整数的素因数分解复杂得多（扩张不是"唯一的"），但它抓住了核心的定性图景。
+
+\hyperlink{q:prime-field-analogy}{返回问题}
+\end{exercise}
+
+\begin{exercise}\label{ex:ans-frobenius-automorphism}
+\hypertarget{ans:frobenius-automorphism}{}
+\textbf{Frobenius 映射只是自同态而非自同构——什么时候它才是自同构？}
+
+Frobenius 映射 $\operatorname{Fr}(x) = x^p$ 永远是域自同态（保持 $0, 1, +, \times$）。
+要成为自同构，还需要它是满射（因为域同态自动是单射）。
+
+在\textbf{有限域}中，Fr 一定是自同构：因为域同态是单射，有限集上的单射必然是满射，从而 Fr 是双射。
+这就是为什么在有限域理论中 Fr 被直接称为 Frobenius 自同构。
+
+在\textbf{无限域}中，Fr 可能不是满射。例如有理函数域 $\mathbb{F}_p(t)$：Fr 把 $t$ 映为 $t^p$，但 $t$ 本身不在 Fr 的像中（$\mathbb{F}_p(t)$ 中没有元素的 $p$ 次方等于 $t$，因为 $(f/g)^p = f^p/g^p$，分子和分母的次数都是 $p$ 的倍数）。
+
+简而言之：Fr 永远单射（因为域同态的性质），满射与否则取决于域是否有限。有限域中一定是自同构，无限域中不一定。
+
+\hyperlink{q:frobenius-automorphism}{返回问题}
+\end{exercise}
+
+\section{域的扩张}\label{sec:field-extension}
+
+本节的核心问题只有一个：\textbf{如何从一个已知的域出发，构造出更大的域？}
+
+在前几节中，我们已经见到了多种域——$\mathbb{Q}$、$\mathbb{R}$、$\mathbb{C}$、$\mathbb{Q}(\sqrt[3]{2})$、$\mathbb{Q}(\sqrt{2},\sqrt{3})$、$\mathbb{Z}_p$。
+这些例子有一个共同特征：它们都是从某个"基域"出发，通过添加新元素构造出来的。
+比如 $\mathbb{Q}(\sqrt{2})$ 就是在 $\mathbb{Q}$ 中添加了 $\sqrt{2}$，然后做四则运算封闭得到的域。
+
+一个自然的问题是：这种"添加元素"的操作，能不能用精确的数学语言描述？
+添加一个元素和添加无穷多个元素，得到的扩张有什么区别？
+扩张的"大小"如何度量？
+
+本节就来回答这些问题。我们会看到，域扩张理论的核心是两种分类维度：
+一个维度是"有限 vs 无限"（扩张作为线性空间的维数），
+另一个维度是"代数 vs 超越"（添加的元素是否满足多项式方程）。
+这两个维度的交叉，构成了域论的基本骨架。
+
+\subsection{有限扩张与有限生成扩张}
+
+我们从两个看似相似、实则不同的概念开始。
+
+\begin{definition}[有限扩张]\label{def:finite-extension}
+设 $E/F$ 是域扩张。如果 $E$ 作为 $F$-线性空间是有限维的，即
+\[[E:F] := \dim_F E < \infty,\]
+则称 $E/F$ 是\textbf{有限扩张}，$[E:F]$ 称为扩张的\textbf{次数}（或维数）。
+\end{definition}
+
+$[E:F]$ 的含义很直观：它就是 $E$ 作为 $F$-向量空间的维数。
+如果 $[E:F] = n$，则 $E$ 中存在 $n$ 个元素 $\{e_1, \ldots, e_n\}$，使得 $E$ 中每个元素都能唯一地写成 $a_1 e_1 + \cdots + a_n e_n$（$a_i \in F$）。
+
+\paragraph*{例 1：$\mathbb{Q}(\sqrt{2})$}
+$\mathbb{Q}(\sqrt{2})$ 中每个元素都可以写成 $a + b\sqrt{2}$（$a, b \in \mathbb{Q}$）的形式。
+因此 $\{1, \sqrt{2}\}$ 是 $\mathbb{Q}(\sqrt{2})$ 在 $\mathbb{Q}$ 上的一组基，$[\mathbb{Q}(\sqrt{2}):\mathbb{Q}] = 2$。
+
+\paragraph*{观察}
+这个例子说明 $\sqrt{2}$ 虽然是无理数，但它"只占一个维度"——添加 $\sqrt{2}$ 只让线性空间多了一维。
+这和直觉一致：$\sqrt{2}$ 满足 $x^2 - 2 = 0$，是一个二次方程的根，所以它带来的"复杂度"是有限的。
+
+\begin{definition}[生成域]\label{def:generated-field}
+设 $E/F$ 是域扩张，$S$ 是 $E$ 的子集。定义 $F(S)$ 为 $E$ 中包含 $S \cup F$ 的最小子域，称为 $S$ 在 $F$ 上\textbf{生成的域}。
+
+$F(S)$ 有两种等价的刻画：
+\begin{enumerate}
+    \item 从 $S \cup F$ 出发，对四则运算封闭得到的域；
+    \item $E$ 中所有包含 $S \cup F$ 的子域的交集。
+\end{enumerate}
+第二种定义对于 $S$ 是无限集时更方便——它不需要"逐步封闭"，而是直接取交。
+
+当 $S = \{u_1, \ldots, u_n\}$ 是有限集时，$F(S)$ 也记为 $F(u_1, \ldots, u_n)$。
+\end{definition}
+
+\begin{definition}[有限生成扩张]\label{def:finitely-generated-extension}
+设 $E/F$ 是域扩张。如果存在 $E$ 的有限子集 $S$ 使得 $F(S) = E$，
+则称 $E/F$ 是 $F$ 的\textbf{有限生成扩张}。
+\end{definition}
+
+\hypertarget{q:finite-vs-finitely-generated}{}
+\medskip
+\noindent\textbf{思考：有限扩张和有限生成扩张的区别是什么？}（\hyperlink{ans:finite-vs-finitely-generated}{跳转到解答}。）
+\medskip
+
+有限扩张和有限生成扩张，这两个名字只差两个字，但含义完全不同：
+
+\begin{itemize}
+    \item 有限扩张：$E$ 作为 $F$-向量空间是有限维的。
+    \item 有限生成扩张：$E$ 可以由有限个元素在 $F$ 上生成。
+\end{itemize}
+
+有限生成扩张的"最小性"有两种等价理解：
+第一种是把生成元逐个加入 $F$，然后做四则运算封闭；
+第二种是取所有包含 $F \cup S$ 的子域的交——这个交集恰好就是 $F(S)$，因为它就是"满足封闭性的最小的域"。
+
+\paragraph*{例 2：$\mathbb{Q}(\sqrt{2}+\sqrt{3})$}
+乍看之下，$\sqrt{2}+\sqrt{3}$ 是一个很"复杂"的生成元。但事实上 $\mathbb{Q}(\sqrt{2}+\sqrt{3}) = \mathbb{Q}(\sqrt{2}, \sqrt{3})$。
+
+证明的思路是：从 $\sqrt{2}+\sqrt{3}$ 出发，用代数运算把 $\sqrt{2}$ 和 $\sqrt{3}$ 分别"解出来"。
+设 $\alpha = \sqrt{2} + \sqrt{3}$，则
+\[\alpha^2 = 5 + 2\sqrt{6}\]
+所以 $\sqrt{6} = \frac{\alpha^2 - 5}{2} \in \mathbb{Q}(\alpha)$。
+进而 $\sqrt{2} \cdot \sqrt{3} = \sqrt{6} \in \mathbb{Q}(\alpha)$。
+现在 $\alpha = \sqrt{2} + \sqrt{3}$ 和 $\sqrt{6} = \sqrt{2} \cdot \sqrt{3}$ 都在 $\mathbb{Q}(\alpha)$ 中，
+这是一个关于 $\sqrt{2}, \sqrt{3}$ 的二元方程组，可以解出 $\sqrt{2}, \sqrt{3} \in \mathbb{Q}(\alpha)$。
+因此 $\mathbb{Q}(\sqrt{2}, \sqrt{3}) \subseteq \mathbb{Q}(\alpha)$，反向包含是显然的。$\square$
+
+\paragraph*{观察}
+这个例子说明生成元的选取有很大的自由度：一个看起来"复杂"的生成元，可能等价于一组更"自然"的生成元。
+同时也说明有限生成扩张的"生成元个数"不是唯一的——$\mathbb{Q}(\sqrt{2}+\sqrt{3})$ 由一个元素生成，
+但 $\mathbb{Q}(\sqrt{2}, \sqrt{3})$ 由两个元素生成，两者是同一个域。
+
+对于无限生成扩张，意味着无法用有限个生成元生成。定义是：对 $E$ 的任意有限子集 $S$，$F(S) \neq E$。
+
+\paragraph*{例 3：无限生成扩张}
+设 $\alpha_k = 2^{1/2^k}$（$k = 0, 1, 2, \ldots$）。
+定义域列
+\[E_0 = \mathbb{Q}, \quad E_1 = \mathbb{Q}(\sqrt{2}), \quad E_2 = \mathbb{Q}(\sqrt{2}, \sqrt[4]{2}), \quad \ldots\]
+由于 $\alpha_{k+1}^2 = \alpha_k$，所以 $E_{k+1} = E_k(\alpha_{k+1})$。
+而且可以简化写法：$E_2 = \mathbb{Q}(\sqrt[4]{2})$（因为 $\sqrt{2} = (\sqrt[4]{2})^2 \in \mathbb{Q}(\sqrt[4]{2})$），以此类推。
+
+这是一个严格递增的域列：$E_0 \subsetneq E_1 \subsetneq E_2 \subsetneq \cdots$。
+设 $E = \bigcup_{k=0}^{\infty} E_k$。$E$ 是一个域：对任意 $a, b \in E$，存在某个 $n$ 使得 $a, b \in E_n$，
+从而 $a+b, a-b, ab, a/b$（$b \neq 0$）都在 $E_n$ 中，因此也在 $E$ 中。
+
+$E/\mathbb{Q}$ 是无限生成的：对 $E$ 的任意有限子集 $S$，$S$ 的元素都属于某个 $E_N$，
+所以 $\mathbb{Q}(S) \subseteq E_N$。而 $E_N \neq E$（因为 $\alpha_{N+1} \notin E_N$），所以 $\mathbb{Q}(S) \neq E$。
+
+为什么 $E_N \subsetneq E_{N+1}$？因为 $\alpha_{N+1}$ 满足 $x^2 - \alpha_N = 0$，
+所以 $\alpha_{N+1}$ 在 $E_N$ 上的极小多项式次数不超过 $2$；
+而如果 $\alpha_{N+1} \in E_N$，则 $\alpha_N$ 在 $E_N$ 中有平方根——
+但这会导致 $[\mathbb{Q}(\alpha_N):\mathbb{Q}]$ 的计算出现矛盾。
+（严格证明需要用到极小多项式的理论，我们稍后会建立。）
+
+\paragraph*{观察}
+这个例子说明"有限生成"和"有限扩张"之间有一道鸿沟。
+每个 $E_k/\mathbb{Q}$ 都是有限扩张，但它们的并 $E/\mathbb{Q}$ 不是有限扩张，甚至不是有限生成的。
+这提示我们：有限生成扩张不一定有限，两者的边界在于生成元是否是"代数元"。
+
+\paragraph*{例 4：$\mathbb{Q}(x)$——有理函数域}
+设 $\mathbb{Q}(x)$ 是有理数域 $\mathbb{Q}$ 上的有理函数域，即所有形如 $\frac{f(x)}{g(x)}$（$f, g \in \mathbb{Q}[x]$，$g \neq 0$）的分式构成的域。
+$\mathbb{Q}(x)$ 是有限生成扩张（由一个元素 $x$ 生成），但它\textbf{不是}有限扩张。
+
+原因：在 $\mathbb{Q}(x)$ 中，$1, x, x^2, x^3, \ldots$ 在 $\mathbb{Q}$ 上线性无关——
+不存在非零的有理系数多项式 $f$ 使得 $f(x) = 0$（因为 $x$ 是一个"形式变元"，不是任何多项式的根）。
+所以 $\mathbb{Q}(x)$ 作为 $\mathbb{Q}$-向量空间是无限维的。
+
+\paragraph*{观察}
+$\mathbb{Q}(x)$ 是有限生成但非有限的扩张。它同时也是非代数的扩张——$x$ 不是 $\mathbb{Q}$ 上的代数元。
+这暗示了一个深层联系：有限扩张要求生成元是"代数的"，而不仅仅是"有限个"。
+
+有限扩张一定是有限生成扩张：设 $[E:F] = n$，取 $E$ 在 $F$ 上的一组基 $\{e_1, \ldots, e_n\}$，
+则 $E$ 中每个元素都是 $e_1, \ldots, e_n$ 的 $F$-线性组合，
+所以 $F(e_1, \ldots, e_n) = E$，即 $E$ 是 $F$ 的有限生成扩张。
+
+反过来不一定成立，正如例 4 所示。那么，有限生成扩张在什么条件下才是有限扩张？
+这就需要引入"代数"的概念。
+
+\subsection{代数扩张与超越扩张}
+
+在上一节中，我们看到 $\mathbb{Q}(x)$ 是有限生成但非有限的扩张，原因在于 $x$ 不满足任何有理系数多项式。
+现在我们把这个观察精确化。
+
+\begin{definition}[代数元与超越元]\label{def:algebraic-transcendental}
+设 $E/F$ 是域扩张，$u \in E$。
+如果存在非零多项式 $f \in F[x]$ 使得 $f(u) = 0$，则称 $u$ 是 $F$ 上的\textbf{代数元}；
+否则称 $u$ 是 $F$ 上的\textbf{超越元}。
+\end{definition}
+
+\begin{definition}[代数扩张与超越扩张]\label{def:algebraic-transcendental-extension}
+设 $E/F$ 是域扩张。如果 $E$ 中每个元素都是 $F$ 上的代数元，则称 $E/F$ 是\textbf{代数扩张}；
+否则称 $E/F$ 是\textbf{超越扩张}。
+\end{definition}
+
+\paragraph*{例 5：$\mathbb{Q}(\sqrt{2})$ 是代数扩张}
+$\sqrt{2}$ 满足 $x^2 - 2 = 0$，所以 $\sqrt{2}$ 是 $\mathbb{Q}$ 上的代数元。
+$\mathbb{Q}(\sqrt{2})$ 中每个元素都可以写成 $a + b\sqrt{2}$（$a, b \in \mathbb{Q}$），
+而 $a + b\sqrt{2}$ 满足 $(x-a)^2 - 2b^2 = 0$，所以每个元素都是代数元。
+因此 $\mathbb{Q}(\sqrt{2})/\mathbb{Q}$ 是代数扩张。
+
+\paragraph*{例 6：$\mathbb{Q}(\pi)$ 是超越扩张}
+$\pi$ 是超越数——它不满足任何有理系数多项式。这是一个深刻的数论结论（林德曼，1882 年），证明远超本课程范围。
+因此 $\mathbb{Q}(\pi)/\mathbb{Q}$ 是超越扩张。
+
+\paragraph*{观察}
+代数扩张和超越扩张的区别，本质上是"满足多项式方程"和"不满足多项式方程"的区别。
+代数元的复杂度是有限的（被一个多项式约束），而超越元的复杂度是无限的（不受任何多项式约束）。
+
+代数数有一个重要性质：代数数的和、差、积、商（除数非零）仍是代数元。
+也就是说，$\mathbb{Q}$ 上的所有代数数构成一个域——记为 $\overline{\mathbb{Q}}$，称为 $\mathbb{Q}$ 的\textbf{代数闭包}。
+
+这个结论并不显然。为什么两个代数元的和仍是代数元？
+设 $\alpha$ 满足 $f(x) \in \mathbb{Q}[x]$，$\beta$ 满足 $g(x) \in \mathbb{Q}[x]$。
+要找一个以 $\alpha + \beta$ 为根的有理系数多项式。
+方法是用\textbf{结式}（resultant）：$\operatorname{Res}_y(f(y), g(x-y))$ 就是一个关于 $x$ 的多项式，
+其根恰好是所有形如 $\alpha_i + \beta_j$ 的和（其中 $\alpha_i$ 遍历 $f$ 的根，$\beta_j$ 遍历 $g$ 的根）。
+特别地，$\alpha + \beta$ 是它的根。
+减法、乘法、除法的情况类似，都可以用结式构造。
+
+有限扩张和代数扩张之间有一个重要关系：
+
+\begin{theorem}[有限扩张必为代数扩张]\label{thm:finite-implies-algebraic}
+设 $E/F$ 是有限扩张，则 $E/F$ 是代数扩张。
+\end{theorem}
+
+证明的策略很直接：利用 $E$ 的有限维性，对 $E$ 中任意元素 $u$，找到一个以 $u$ 为根的多项式。
+
+设 $[E:F] = n$。对任意 $u \in E$，考虑 $E$ 中的 $n+1$ 个元素
+\[1, u, u^2, \ldots, u^n\]
+因为 $E$ 作为 $F$-向量空间是 $n$ 维的，所以这 $n+1$ 个元素必然线性相关。
+即存在不全为零的 $a_0, a_1, \ldots, a_n \in F$，使得
+\[a_0 + a_1 u + a_2 u^2 + \cdots + a_n u^n = 0\]
+这说明 $u$ 是多项式 $f(x) = a_0 + a_1 x + \cdots + a_n x^n \in F[x]$ 的根。
+因此 $u$ 是 $F$ 上的代数元。$\square$
+
+这个证明的核心只用到了一个事实：$E$ 的有限维性提供了一个"上界"——
+不管取 $E$ 的哪个元素，它的 $n+1$ 个幂次一定线性相关。
+这正是有限扩张和无限扩张的本质区别：
+在无限维空间中，一个元素的幂次可以永远线性无关（比如 $\mathbb{Q}(x)$ 中的 $1, x, x^2, \ldots$）。
+
+反过来不一定成立：代数扩张不一定是有限扩张。
+例 3 中的 $E = \mathbb{Q}(\sqrt{2}, \sqrt[4]{2}, \sqrt[8]{2}, \ldots)/\mathbb{Q}$ 就是代数扩张（每个 $\alpha_k = 2^{1/2^k}$ 都满足 $x^{2^k} - 2 = 0$），但不是有限扩张。
+
+那么，代数扩张加上什么条件才能推出有限扩张？答案是：加上"有限生成"。
+更精确地说，有限扩张等价于"由有限个代数元生成的扩张"。
+要证明这一点，我们需要先建立两个工具：极小多项式和维数公式。
+
+\subsection{极小多项式}
+
+极小多项式是连接"代数元"和"有限扩张"的桥梁。
+
+\begin{definition}[极小多项式]\label{def:minimal-polynomial}
+设 $E/F$ 是域扩张，$u \in E$ 是 $F$ 上的代数元。
+在所有满足 $f(u) = 0$ 的非零多项式 $f \in F[x]$ 中，次数最小的首一多项式称为 $u$ 在 $F$ 上的\textbf{极小多项式}，记为 $\operatorname{irr}(u, F)$。
+\end{definition}
+
+极小多项式有三个关键性质：
+
+\paragraph*{性质 1：唯一性}
+极小多项式是唯一的。设 $m_1(x)$ 和 $m_2(x)$ 都是 $u$ 的极小多项式（次数相同，都是首一的），
+则 $m_1(x) - m_2(x)$ 是次数更低的多项式且以 $u$ 为根。
+如果 $m_1 \neq m_2$，则 $m_1 - m_2$ 是非零多项式，其次数小于极小多项式的次数——这与极小多项式的定义矛盾。
+因此 $m_1 = m_2$。$\square$
+
+\paragraph*{性质 2：不可约性}
+极小多项式在 $F[x]$ 中不可约。
+假设 $\operatorname{irr}(u, F) = g(x) h(x)$，其中 $g, h \in F[x]$ 的次数都严格小于 $\operatorname{irr}(u, F)$ 的次数。
+则 $0 = \operatorname{irr}(u, F)(u) = g(u) \cdot h(u)$。
+因为 $E$ 是域，没有零因子，所以 $g(u) = 0$ 或 $h(u) = 0$。
+无论哪种情况，都存在一个次数更小的非零多项式以 $u$ 为根——与极小多项式的定义矛盾。$\square$
+
+\paragraph*{观察}
+不可约性保证了极小多项式不能被"分解"。
+这与后面构造单代数扩张密切相关：正是因为极小多项式不可约，
+我们才能用它来构造商环，从而得到域。
+
+\subsection{中间域与维数公式}
+
+在研究扩张的结构时，一个自然的问题是：大扩张和小扩张之间有什么关系？
+
+\begin{definition}[中间域]\label{def:intermediate-field}
+设 $E/F$ 是域扩张。如果域 $K$ 满足 $F \subseteq K \subseteq E$，则称 $K$ 是 $E/F$ 的\textbf{中间域}。
+\end{definition}
+
+中间域的存在性不是必然的——有些扩张没有非平凡的中间域。
+但当中间域存在时，三个域的维数之间有一个基本关系：
+
+\begin{lemma}[维数公式]\label{lem:tower-law}
+设 $E/F$ 是域扩张，$K$ 是中间域（$F \subseteq K \subseteq E$）。则
+\[[E:F] = [E:K] \cdot [K:F]\]
+其中任何一侧有限当且仅当另一侧也有限。
+\end{lemma}
+
+证明的策略是：把 $E$ 在 $F$ 上的基"拆"成两层——先用 $K$ 在 $F$ 上的基展开 $K$ 的元素，
+再用 $E$ 在 $K$ 上的基展开 $E$ 的元素。
+
+设 $[K:F] = m$，$\{k_1, \ldots, k_m\}$ 是 $K$ 在 $F$ 上的一组基；
+设 $[E:K] = n$，$\{e_1, \ldots, e_n\}$ 是 $E$ 在 $K$ 上的一组基。
+我们断言 $\{e_i k_j : 1 \leq i \leq n, 1 \leq j \leq m\}$ 是 $E$ 在 $F$ 上的一组基。
+
+\textbf{生成性}：对任意 $u \in E$，因为 $\{e_1, \ldots, e_n\}$ 是 $E$ 在 $K$ 上的基，
+所以 $u = \sum_{i=1}^n c_i e_i$（$c_i \in K$）。
+对每个 $c_i$，因为 $\{k_1, \ldots, k_m\}$ 是 $K$ 在 $F$ 上的基，
+所以 $c_i = \sum_{j=1}^m a_{ij} k_j$（$a_{ij} \in F$）。
+代入得 $u = \sum_{i,j} a_{ij} e_i k_j$，即 $u$ 可以用 $\{e_i k_j\}$ 在 $F$ 上线性表示。
+
+\textbf{线性无关性}：设 $\sum_{i,j} a_{ij} e_i k_j = 0$（$a_{ij} \in F$）。
+改写为 $\sum_{i=1}^n \left(\sum_{j=1}^m a_{ij} k_j\right) e_i = 0$。
+括号中的 $\sum_{j=1}^m a_{ij} k_j$ 是 $K$ 中的元素，记为 $c_i$。
+因为 $\{e_1, \ldots, e_n\}$ 在 $K$ 上线性无关，所以 $c_i = 0$ 对所有 $i$。
+又因为 $\{k_1, \ldots, k_m\}$ 在 $F$ 上线性无关，所以 $a_{ij} = 0$ 对所有 $i, j$。
+
+因此 $\{e_i k_j\}$ 确实是 $E$ 在 $F$ 上的一组基，共有 $mn$ 个元素，所以 $[E:F] = mn = [E:K] \cdot [K:F]$。$\square$
+
+\paragraph*{观察}
+维数公式的形式和集合的基数公式 $|A \cup B|$ 类似，但含义完全不同：
+这里说的是"维数相乘"，而不是"相加"。
+直觉上，$E$ 在 $F$ 上的基可以看成"两层基的乘积"——
+先选 $K$ 在 $F$ 上的基（$m$ 个），再选 $E$ 在 $K$ 上的基（$n$ 个），
+两者组合起来给出 $E$ 在 $F$ 上的 $mn$ 个基。
+
+\hypertarget{q:prime-intermediate}{}
+\medskip
+\noindent\textbf{思考：如果 $[E:F]$ 是素数，中间域的情况如何？}（\hyperlink{ans:prime-intermediate}{跳转到解答}。）
+\medskip
+
+\begin{corollary}[素数次数扩张没有非平凡中间域]\label{cor:prime-no-intermediate}
+设 $E/F$ 是域扩张，$[E:F]$ 是素数。则 $E/F$ 没有非平凡的中间域。
+\end{corollary}
+
+设 $K$ 是中间域。由维数公式，$[E:F] = [E:K] \cdot [K:F]$。
+因为 $[E:F]$ 是素数，所以 $[E:K] = 1$ 或 $[K:F] = 1$，
+即 $K = E$ 或 $K = F$。$\square$
+
+\subsection{单代数扩张}
+
+现在我们回到代数扩张和有限扩张的关系。
+上一节的例 4 告诉我们，有限生成扩张不一定是有限扩张（如果生成元是超越元）。
+但如果生成元是代数元，情况就完全不同了。
+
+\begin{lemma}[单代数扩张是有限扩张]\label{lem:single-algebraic-finite}
+设 $E = F(u)$，其中 $u$ 是 $F$ 上的代数元。则 $E/F$ 是有限扩张，
+且 $[F(u):F] = \deg(\operatorname{irr}(u, F))$。
+\end{lemma}
+
+设 $\operatorname{irr}(u, F) = x^n + a_{n-1} x^{n-1} + \cdots + a_0$（$a_i \in F$），次数为 $n$。
+我们断言 $\{1, u, u^2, \ldots, u^{n-1}\}$ 是 $F(u)$ 在 $F$ 上的一组基。
+
+\textbf{生成性}：先说明 $F[u]$（由 $u$ 的多项式构成的集合）等于 $F(u)$（$u$ 在 $F$ 上生成的域）。
+显然 $F[u] \subseteq F(u)$。反过来，需要说明 $F[u]$ 中每个非零元素都有乘法逆（从而 $F[u]$ 是域）。
+
+设 $v \in F[u]$，$v \neq 0$。则 $v = g(u)$，其中 $g \in F[x]$ 是非零多项式。
+因为 $\operatorname{irr}(u, F)$ 不可约且 $g(u) \neq 0$，所以 $\gcd(g, \operatorname{irr}(u, F)) = 1$。
+由裴蜀定理，存在 $s, t \in F[x]$ 使得 $s(x) g(x) + t(x) \operatorname{irr}(u, F) = 1$。
+代入 $x = u$：$s(u) g(u) + t(u) \cdot 0 = 1$，即 $s(u) \cdot v = 1$。
+所以 $v^{-1} = s(u) \in F[u]$。因此 $F[u]$ 对取逆封闭，$F[u]$ 是域，从而 $F[u] = F(u)$。
+
+现在，$F[u]$ 中每个元素都是 $u$ 的多项式，可以用 $\operatorname{irr}(u, F)$ 做带余除法：
+对任意 $g(x) \in F[x]$，设 $g(x) = q(x) \operatorname{irr}(u, F) + r(x)$，其中 $\deg r < n$。
+代入 $x = u$：$g(u) = r(u)$。
+所以 $F[u]$ 中每个元素都可以写成 $r(u)$，其中 $\deg r < n$，
+即 $F[u] = \operatorname{span}_F\{1, u, u^2, \ldots, u^{n-1}\}$。
+
+\textbf{线性无关性}：假设 $a_0 + a_1 u + \cdots + a_{n-1} u^{n-1} = 0$（$a_i \in F$，不全为零）。
+则多项式 $h(x) = a_0 + a_1 x + \cdots + a_{n-1} x^{n-1}$ 以 $u$ 为根，且 $\deg h < n$。
+这与 $\operatorname{irr}(u, F)$ 是次数最小的以 $u$ 为根的非零多项式矛盾。
+因此 $\{1, u, u^2, \ldots, u^{n-1}\}$ 线性无关。
+
+综合两方面，$\{1, u, u^2, \ldots, u^{n-1}\}$ 是 $F(u)$ 在 $F$ 上的一组基，$[F(u):F] = n = \deg(\operatorname{irr}(u, F))$。$\square$
+
+\paragraph*{观察}
+这个证明中有两个关键步骤：一是用裴蜀定理证明 $F[u] = F(u)$（即多项式环等于域），
+二是用带余除法说明每个元素都可以用次数低于 $n$ 的多项式表示。
+两者都依赖于极小多项式的不可约性——这正是我们上一节强调极小多项式不可约的原因。
+
+单代数扩张的维数恰好等于极小多项式的次数，这不是巧合。
+极小多项式度量了代数元的"复杂度"，而维数度量了扩张的"大小"——两者是同一个东西的两面。
+
+\subsection{有限扩张的刻画与传递性}
+
+有了极小多项式和维数公式，我们可以回答本节的核心问题：有限扩张的充要条件是什么？
+
+\begin{theorem}[有限扩张的刻画]\label{thm:finite-extension-characterization}
+设 $E/F$ 是域扩张。则 $E/F$ 是有限扩张，当且仅当存在 $u_1, \ldots, u_n \in E$，
+使得每个 $u_i$ 都是 $F$ 上的代数元，且 $E = F(u_1, \ldots, u_n)$。
+\end{theorem}
+
+$(\Rightarrow)$：设 $[E:F] = n$。取 $E$ 在 $F$ 上的一组基 $\{e_1, \ldots, e_n\}$。
+则 $E = F(e_1, \ldots, e_n)$，且由定理 \ref{thm:finite-implies-algebraic}，每个 $e_i$ 都是 $F$ 上的代数元。
+
+$(\Leftarrow)$：设 $E = F(u_1, \ldots, u_n)$，每个 $u_i$ 都是 $F$ 上的代数元。
+我们用维数公式和单代数扩张的结论，逐步"搭建"扩张。
+
+考虑域列
+\[F \subseteq F(u_1) \subseteq F(u_1, u_2) \subseteq \cdots \subseteq F(u_1, \ldots, u_n) = E\]
+每一步 $F(u_1, \ldots, u_{k+1}) = F(u_1, \ldots, u_k)(u_{k+1})$ 都是单扩张。
+
+关键问题是：$u_{k+1}$ 在 $F(u_1, \ldots, u_k)$ 上是否仍是代数元？
+答案是肯定的——因为 $u_{k+1}$ 满足 $\operatorname{irr}(u_{k+1}, F)$，而 $F \subseteq F(u_1, \ldots, u_k)$，
+所以 $u_{k+1}$ 也满足 $F(u_1, \ldots, u_k)$ 上的某个多项式（比如 $\operatorname{irr}(u_{k+1}, F)$ 本身）。
+因此 $u_{k+1}$ 在 $F(u_1, \ldots, u_k)$ 上是代数元。
+
+由引理 \ref{lem:single-algebraic-finite}，每一步 $[F(u_1, \ldots, u_{k+1}):F(u_1, \ldots, u_k)]$ 都是有限的。
+反复应用维数公式：
+\begin{align*}
+[E:F] &= [F(u_1, \ldots, u_n):F] \\
+      &= [F(u_1, \ldots, u_n):F(u_1, \ldots, u_{n-1})] \cdot [F(u_1, \ldots, u_{n-1}):F(u_1, \ldots, u_{n-2})] \cdots [F(u_1):F]
+\end{align*}
+每一步都是有限的，所以 $[E:F]$ 有限。$\square$
+
+\paragraph*{观察}
+这个定理把代数性和有限性精确地联系在一起：有限扩张就是"由有限个代数元生成的扩张"。
+证明的关键技巧是把多生成元的扩张"拆"成逐个单扩张，每一步用维数公式保证维数相乘仍然有限。
+
+定理的一个直接推论：有限扩张 + 有限生成扩张 $\Rightarrow$ 有限扩张。
+更准确地说，代数扩张 + 有限生成扩张 $\Rightarrow$ 有限扩张。
+
+最后，代数扩张也有传递性：
+
+\begin{theorem}[代数扩张的传递性]\label{thm:algebraic-transitive}
+设 $E/K$ 和 $K/F$ 都是代数扩张，则 $E/F$ 也是代数扩张。
+\end{theorem}
+
+设 $u \in E$。因为 $E/K$ 是代数扩张，$u$ 在 $K$ 上是代数元，设 $\operatorname{irr}(u, K) = x^n + c_{n-1}x^{n-1} + \cdots + c_0$（$c_i \in K$）。
+因为 $K/F$ 是代数扩张，每个 $c_i$ 都是 $F$ 上的代数元。
+设 $L = F(c_0, c_1, \ldots, c_{n-1})$。因为 $c_i$ 都是 $F$ 上的代数元，由定理 \ref{thm:finite-extension-characterization}，$L/F$ 是有限扩张。
+又因为 $u$ 在 $L$ 上满足 $x^n + c_{n-1}x^{n-1} + \cdots + c_0 = 0$，所以 $u$ 在 $L$ 上是代数元，$L(u)/L$ 是有限扩张。
+由维数公式，$[L(u):F] = [L(u):L] \cdot [L:F]$ 有限，所以 $L(u)/F$ 是有限扩张。
+由定理 \ref{thm:finite-implies-algebraic}，$L(u)/F$ 是代数扩张，特别地 $u$ 是 $F$ 上的代数元。
+因为 $u$ 是任意的，所以 $E/F$ 是代数扩张。$\square$
+
+\paragraph*{观察}
+传递性的证明用到了一个巧妙的中间域 $L = F(c_0, \ldots, c_{n-1})$。
+它的作用是把"系数在 $K$ 中"的极小多项式"拉回"到 $F$ 上：
+虽然 $u$ 的极小多项式系数在 $K$ 中，但这些系数本身都是 $F$ 上的代数元，
+所以可以把它们和 $u$ 一起放入一个有限扩张中。
+
+有限生成扩张也有传递性：如果 $K = F(S_1)$，$E = K(S_2)$，其中 $S_1, S_2$ 都是有限集，
+则 $E = F(S_1 \cup S_2)$，也是有限生成的。证明很简单：把两次新增的生成元合在一起即可。
+
+本节建立的概念关系可以用一句话概括：\textbf{有限扩张 = 代数 + 有限生成}。
+这个等式是域扩张理论的基石。我们后面讲分裂域、正规扩张、可分扩张时，都会回到这个基本框架。
+
+\subsection*{课堂问题参考解答}
+
+\begin{exercise}\label{ex:ans-finite-vs-finitely-generated}
+\hypertarget{ans:finite-vs-finitely-generated}{}
+\textbf{有限扩张和有限生成扩张的区别是什么？各举一例。}
+
+有限扩张要求 $E$ 作为 $F$-向量空间是有限维的（$[E:F] < \infty$）；
+有限生成扩张只要求 $E$ 可以由有限个元素在 $F$ 上生成（$E = F(u_1, \ldots, u_n)$）。
+
+有限扩张一定是有限生成扩张（取基作为生成元即可），但反过来不一定成立。
+反例：$\mathbb{Q}(x)$ 是有限生成扩张（由 $x$ 一个元素生成），但不是有限扩张（$1, x, x^2, \ldots$ 线性无关，$[\mathbb{Q}(x):\mathbb{Q}] = \infty$）。
+
+两者等价的条件是：生成元必须是代数元。即有限扩张 $\Leftrightarrow$ 由有限个代数元生成的扩张。
+
+\hyperlink{q:finite-vs-finitely-generated}{返回问题}
+\end{exercise}
+
+\begin{exercise}\label{ex:ans-prime-intermediate}
+\hypertarget{ans:prime-intermediate}{}
+\textbf{如果 $[E:F]$ 是素数，中间域的情况如何？}
+
+如果 $[E:F]$ 是素数 $p$，则 $E/F$ 没有非平凡的中间域。
+这是因为维数公式 $[E:F] = [E:K] \cdot [K:F]$ 的右边是两个正整数的乘积，
+而 $p$ 是素数，所以 $[E:K]$ 或 $[K:F]$ 必须等于 $1$，即 $K = E$ 或 $K = F$。
+
+直觉上，素数次数的扩张是"不可再分"的——没有办法把它拆成两步较小的扩张。
+这和素数在整数中的角色类似：素数不能分解为更小的正整数的乘积。
+
+\hyperlink{q:prime-intermediate}{返回问题}
+\end{exercise}
