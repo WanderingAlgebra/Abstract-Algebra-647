@@ -1,7 +1,7 @@
 % why-notes: true
 % expositor: true
 
-\section{环与模的定义}\label{sec:ring-module-definition}
+\section{环的定义与例子}\label{sec:ring-definition-examples}
 
 \subsection{环的定义}\label{sec:ring-definition}
 
@@ -12,7 +12,7 @@
 环就是在这个地方出现的。
 粗略地说，环仍然有加法和乘法，但乘法的要求比域弱得多：它要满足结合律，并且要和加法通过分配律配合；至于乘法是否交换、是否有单位元、非零元素是否有逆元，都先不强求。
 
-\subsubsection{公理化定义}
+\paragraph*{公理化定义}
 
 \begin{definition}[环]\label{def:ring}
 设 $R$ 是一个非空集合，配备两种二元运算 $+$ 和 $\cdot$。
@@ -51,10 +51,10 @@
 域要求非零元素在乘法下构成阿贝尔群；环只要求乘法结合，并通过分配律与加法相容。
 这正好解释了为什么环的例子会比域丰富得多。
 
-\subsubsection{基本例子}
+\subsection{环的基本例子}\label{sec:ring-basic-examples}
 
 判断一个对象是不是环，不能只看它有加法和乘法，还要看这些运算是否满足定义中的相容条件。
-先从线性代数里最熟悉的线性变换和矩阵开始。
+先从线性代数里最熟悉的对象开始。
 
 \paragraph*{例 1：线性变换环和矩阵环}
 设 $V$ 是数域 $F$ 上的有限维线性空间。
@@ -90,7 +90,7 @@ ST=S\circ T.
 (R(S+T))(v)=R(S(v)+T(v))=R(S(v))+R(T(v)),
 \]
 因此 $R(S+T)=RS+RT$。
-这就验证了环定义中的三类条件。
+三条公理都已满足，所以 $\operatorname{End}_F(V)$ 是一个环。
 它的乘法单位元就是恒等变换 $\operatorname{id}_V$。
 
 如果给定 $V$ 的一组基，每个线性变换都可以表示成一个 $n$ 阶矩阵。
@@ -98,7 +98,7 @@ ST=S\circ T.
 \[
 \operatorname{End}_F(V)\cong M_n(F).
 \]
-这说明 $n$ 阶矩阵全体在矩阵加法和矩阵乘法下构成环；矩阵加法、乘法的环公理正是线性变换环在选基后的坐标表达。
+这说明 $n$ 阶矩阵全体在矩阵加法和矩阵乘法下构成环；矩阵加法、乘法的环公理可以看作线性变换环在选定基后的坐标表示。
 当 $n\geq 2$ 时，这个环一般不交换。
 这类例子最适合提醒我们：乘法不交换并不妨碍它成为环。
 
@@ -195,23 +195,35 @@ $R^X$ 构成一个环。
 
 \paragraph*{例 5：群代数}
 设 $G$ 是有限群，$F$ 是域。
-群代数 $F[G]$ 可以先看成以 $G$ 中元素为一组基的 $F$-向量空间：
+群代数 $F[G]$ 的构造思路是：先把群元素当成一组形式基，得到一个 $F$-向量空间；再把群里的乘法扩展成这个向量空间上的乘法。
+
+作为集合，
 \[
 F[G]=\left\{\sum_{g\in G}a_g g:a_g\in F\right\}.
 \]
-加法就是按同一个 $g$ 的系数相加。
-因此它在加法下只是一个有限维 $F$-向量空间，当然是阿贝尔群。
-乘法由群中的乘法和分配律共同决定：
+这里的 $g$ 不是被当作 $F$ 中的元素，而是被当作形式基向量。
+因为 $G$ 有限，$F[G]$ 就是以 $G$ 为基的有限维 $F$-向量空间。
+加法按同一个基向量的系数相加：
+\[
+\sum_{g\in G}a_g g+\sum_{g\in G}b_g g
+=\sum_{g\in G}(a_g+b_g)g.
+\]
+零元是 $\sum_{g\in G}0g$，而 $\sum a_g g$ 的加法逆元是 $\sum (-a_g)g$。
+所以 $(F[G],+)$ 是阿贝尔群，环定义的第一部分已经满足。
+
+加法已经由向量空间保证；新的结构集中在乘法怎么定义。
+乘法先在基元素上定义：两个基元素 $g,h\in G$ 相乘，结果就是群里的乘积 $gh$。
+一般元素的乘法则由双线性扩展给出：
 \[
 \left(\sum_{g\in G}a_g g\right)
 \left(\sum_{h\in G}b_h h\right)
 =
 \sum_{g,h\in G}a_gb_h(gh).
 \]
-这里 $a_gb_h$ 是域 $F$ 中的乘法，$gh$ 是群 $G$ 中的乘法。
-乘积仍是 $G$ 中元素的有限线性组合，所以乘法封闭。
+这里一项 $a_gb_h(gh)$ 的来源是：从左边取 $a_g g$，从右边取 $b_h h$，系数在 $F$ 里相乘，基元素在 $G$ 里相乘。
+由于 $gh$ 仍是 $G$ 中的元素，乘积仍是这些形式基的有限线性组合，所以乘法封闭。
 
-先用最小的非平凡例子看一下这个公式。
+下面用一个最小的非平凡例子来展示这种乘法。
 设
 \[
 G=C_2=\{e,s\},\qquad s^2=e.
@@ -223,19 +235,34 @@ G=C_2=\{e,s\},\qquad s^2=e.
 =ac\,e+ad\,s+bc\,s+bd\,s^2
 =(ac+bd)e+(ad+bc)s.
 \]
-这就是群代数乘法的本质：系数在 $F$ 里相乘，基向量的下标按群乘法合并。
+这个例子显示，群代数乘法不是逐坐标相乘，而是先按群乘法合并基向量，再收集同类项。
 
-结合律的关键来自群乘法结合律。若先看基元素，则
+加法阿贝尔群已经由向量空间结构给出。
+乘法结合律的来源藏在基元素里：对 $g,h,k\in G$，
 \[
-(gh)k=g(hk).
+(gh)k=g(hk)
 \]
-再把这个等式按双线性扩展到所有线性组合，就得到 $F[G]$ 中乘法的结合律。
-分配律不是额外证明出来的，而是这个乘法定义本身就是由基元素乘法双线性扩展来的。
-群的单位元 $e$ 对应的基向量就是 $F[G]$ 的乘法单位元。
-确实，$eg=ge=g$，再线性扩展后 $e$ 乘任意元素都不变。
-如果 $G$ 非交换，那么 $F[G]$ 通常也非交换，因为基元素的乘法已经反映了 $gh$ 和 $hg$ 的区别；若 $G$ 是交换群，则 $F[G]$ 是交换环。
+正是群乘法的结合律。
+一般线性组合的结合律由这个基元素等式按双线性展开得到；每一项都在比较同一个三元组 $(g,h,k)$ 在 $(gh)k$ 和 $g(hk)$ 中的系数。
 
-也可以换一个视角。
+分配律来自乘法定义本身的双线性。
+例如在 $\alpha(\beta+\gamma)$ 中，固定一对基元素 $(g,h)$，对应项的系数为 $a_g(b_h+c_h)$，由 $F$ 中的分配律拆成 $a_gb_h+a_gc_h$，于是这一项变成
+\[
+a_gb_h(gh)+a_gc_h(gh),
+\]
+正好分别出现在 $\alpha\beta$ 和 $\alpha\gamma$ 中。
+右分配律同理。
+
+若 $e$ 是群 $G$ 的单位元，那么 $1_F e$ 是 $F[G]$ 的乘法单位元。
+原因是对每个基元素 $g$ 都有
+\[
+(1_F e)g=g(1_F e)=g,
+\]
+再按线性性扩展到任意元素。
+因此 $F[G]$ 是一个含幺环。
+它通常不是交换环：如果 $G$ 非交换，那么不同的群元素作为基向量线性无关，$gh\neq hg$ 会直接给出两个不同的基向量；若 $G$ 是交换群，则 $F[G]$ 是交换环。
+
+还有一个常用视角，可以看清群代数乘法与函数环逐点乘法的区别。
 因为 $G$ 是有限集，$F[G]$ 中的形式和
 \[
 \sum_{g\in G}a_g g
@@ -249,33 +276,45 @@ a:G\to F,\qquad g\mapsto a(g).
 \[
 (a*b)(k)=\sum_{gh=k}a(g)b(h),\qquad k\in G.
 \]
-这个公式正是前面乘法公式的"收集同类项"版本：所有满足 $gh=k$ 的乘积项都会贡献到基向量 $k$ 的系数上。
+固定一个 $k\in G$ 后，求和指标不是所有单个群元素，而是所有有序对 $(g,h)$，它们满足 $gh=k$。
+每一对 $(g,h)$ 都给出一个贡献 $a(g)b(h)$：它来自第一项中基向量 $g$ 的系数和第二项中基向量 $h$ 的系数。
+这个公式是前面乘法公式的"收集同类项"版本：所有满足 $gh=k$ 的乘积项都会贡献到基向量 $k$ 的系数上。
 有限性保证了这个求和是有限和。
 
 \paragraph*{例 6：路径代数}
-路径代数和群代数很像，只是把"群元素"换成了 quiver 中的路径。
-这里 quiver 可以先按有向图来理解；一般定义中允许重边和环路，当前例子只需要最简单的有向图情形。
+路径代数和群代数很像，只是把"群元素"换成了 quiver（有向图，允许重边和环路）中的路径。
+当前例子只需要最简单的有向图情形。
 顶点看成长度为 $0$ 的路径，箭头看成长度为 $1$ 的路径，首尾能接上的路径可以拼成更长的路径。
 
 设 $Q$ 是一个 quiver，$F$ 是域。
 路径代数 $FQ$ 是以 $Q$ 中所有路径为基的 $F$-向量空间。
 因此它的加法阿贝尔群结构来自向量空间加法。
-乘法先在基路径上定义。
+乘法也先在基路径上定义。
 本节采用从右往左读的乘法约定：
 \[
 pq=\text{先走 }q,\text{ 再走 }p.
 \]
 如果 $q$ 的终点等于 $p$ 的起点，就把两条路径拼接起来；如果接不上，就规定乘积为 $0$。
-然后再用分配律扩展到一般线性组合。
+一般线性组合再按线性性展开：
+\[
+\left(\sum_p a_p p\right)\left(\sum_q b_q q\right)=\sum_{p,q}a_pb_q(pq)
+\]
+给出。
+这里 $p,q$ 遍历 $Q$ 中所有路径。
+一项 $a_pb_q(pq)$ 的意思是：先从右边线性组合中取路径 $q$，再从左边线性组合中取路径 $p$；系数相乘为 $a_pb_q$，路径部分按约定先走 $q$ 再走 $p$。
+如果 $q$ 的终点和 $p$ 的起点接不上，那么这一项中的 $pq$ 就是 $0$，不会贡献新的路径。
 乘法封闭是因为拼接后的结果仍是路径，接不上时结果是 $0$。
 
-结合律需要稍微看一下。
-对三条基路径 $p,q,r$，如果它们能够按从右到左的顺序全部拼接，那么 $(pq)r$ 和 $p(qr)$ 都是同一条长路径；如果某个接口接不上，那么无论先算左边还是先算右边，最终都会在相同的拼接障碍处变成 $0$。
-所以基路径上的乘法满足结合律，再由线性扩展得到整个 $FQ$ 的结合律。
-分配律同样来自线性扩展。
+结合律仍然先看基路径。
+对三条基路径 $p,q,r$，$(pq)r$ 和 $p(qr)$ 非零当且仅当两个拼接处都匹配；这时二者都是按从右到左顺序拼出的同一条路径。
+只要有一个拼接处不匹配，两边都会等于 $0$。
+因此基路径上的乘法满足结合律。
+一般线性组合由基路径的结果线性扩展而来。
+分配律也一样：路径乘积 $pq$ 不变，只是系数里的 $a_p(b_q+c_q)$ 被拆成 $a_pb_q+a_pc_q$。
+于是路径代数的环公理归结为两件事：路径拼接是结合的，系数域 $F$ 中的加法和乘法满足分配律。
 
-先看一个完整的小例子。
-设 quiver 是
+先看一个小例子。
+设 quiver（有向图）$Q$ 是
 \[
 1\xrightarrow{\alpha}2.
 \]
@@ -299,7 +338,7 @@ FQ=\{ae_1+be_2+c\alpha:a,b,c\in F\},
 \]
 乘法完全由上面这些基路径规则和分配律决定。
 
-再看一个稍长的路径：
+再看一个稍复杂的路径代数。
 \[
 1\xrightarrow{\alpha}2\xrightarrow{\beta}3.
 \]
@@ -325,17 +364,57 @@ Hamilton 四元数可以写成
 \[
 i^2=j^2=k^2=-1,\qquad ij=k,\quad jk=i,\quad ki=j,
 \]
-并且反过来换序会变号：
+交换顺序则变号：
 \[
 ji=-k,\qquad kj=-i,\qquad ik=-j.
 \]
 加法就是 $\mathbb R^4$ 的逐坐标加法，所以加法阿贝尔群结构没有新困难。
-乘法由上面的基元乘法规则和对实系数的双线性扩展决定。
-封闭性来自这样一个事实：任意两个四元数相乘后仍能唯一写成 $a+bi+cj+dk$ 的形式。
-分配律也正是双线性扩展的含义。
+乘法按基元乘法规则逐项展开。
+封闭性来自这样一个事实：任意两个四元数相乘后仍能写成 $a+bi+cj+dk$ 的形式。
+若记
+\[
+u_0=1,\qquad u_1=i,\qquad u_2=j,\qquad u_3=k,
+\]
+并写
+\[
+q=\sum_{\ell=0}^3x_\ell u_\ell,\qquad
+q'=\sum_{m=0}^3y_m u_m,
+\]
+则乘法可以写成
+\[
+qq'=\sum_{\ell,m=0}^3x_\ell y_m(u_\ell u_m).
+\]
+这个双重求和一共有 $16$ 项。
+每一项都来自第一个四元数中的一个基元 $x_\ell u_\ell$ 和第二个四元数中的一个基元 $y_m u_m$；系数相乘为 $x_\ell y_m$，基元乘积 $u_\ell u_m$ 再按乘法表化回 $\pm1,\pm i,\pm j,\pm k$。
+例如 $\ell=1,m=2$ 时，得到的项是
+\[
+x_1y_2(u_1u_2)=x_1y_2(ij)=x_1y_2k.
+\]
+再取第三个四元数
+$q''=\sum_{m=0}^3z_m u_m$。
+逐项展开得到
+\[
+q(q'+q'')
+=\sum_{\ell,m=0}^3x_\ell(y_m+z_m)(u_\ell u_m)
+=\sum_{\ell,m=0}^3x_\ell y_m(u_\ell u_m)
+ +\sum_{\ell,m=0}^3x_\ell z_m(u_\ell u_m)
+=qq'+qq''.
+\]
+右边的分配律也由同样的逐项展开得到：
+\[
+(q+q')q''=qq''+q'q''.
+\]
+因此四元数乘法对实数是双线性的，左右分配律随之成立。
 
 四元数乘法虽然不交换，但它仍然结合。
-这可以通过基元乘法表逐项检查，也可以把四元数表示成某些实矩阵后由矩阵乘法结合律得到。
+验证的一种方式是把四元数表示成实矩阵。例如令
+\[
+I=\begin{pmatrix}0&-1&0&0\\1&0&0&0\\0&0&0&-1\\0&0&1&0\end{pmatrix},\quad
+J=\begin{pmatrix}0&0&-1&0\\0&0&0&1\\1&0&0&0\\0&-1&0&0\end{pmatrix},\quad
+K=\begin{pmatrix}0&0&0&-1\\0&0&-1&0\\0&1&0&0\\1&0&0&0\end{pmatrix},
+\]
+则 $I^2=J^2=K^2=-\mathrm{id}$，$IJ=K$，$JK=I$，$KI=J$，与四元数乘法表一致。
+四元数 $a+bi+cj+dk$ 对应矩阵 $aI_4+bI+cJ+dK$，矩阵乘法的结合律保证了四元数乘法也结合。
 在这些乘法规则下，$\mathbb H$ 是一个有单位元的环，单位元是 $1$。
 它的特点是每个非零四元数都有逆元。
 若
@@ -357,7 +436,161 @@ q^{-1}=\frac{\overline q}{q\overline q}
 \]
 分母是正实数，因为 $q\neq0$。
 不过 $\mathbb H$ 的乘法不交换，例如 $ij=k$ 而 $ji=-k$。
-所以它不是通常意义下的域，却是理解"非交换乘法"时非常重要的例子。
+所以它不是域（域要求乘法交换），而是一个除环（也称斜域）：每个非零元素都有逆元，但乘法不必交换。
+$\mathbb H$ 是理解非交换乘法的重要例子。
+
+\subsection{环的特征}\label{sec:ring-characteristic}
+
+第一章讨论域的特征时，我们关心的是一个很朴素的问题：把乘法单位元 $1$ 反复相加，什么时候会回到 $0$。
+这个问题并不只属于域。只要一个环有乘法单位元，同样可以问 $1_R$ 在加法群中生成的那一串元素
+\[
+0,\ 1_R,\ 2\cdot 1_R,\ 3\cdot 1_R,\ \ldots
+\]
+是否会回到 $0$。
+
+本节只讨论含幺环的特征。原因是下面的定义要用到环中的乘法单位元 $1_R$。
+前面例子中的矩阵环、函数环、群代数、有限顶点的路径代数和四元数环都属于这个范围；而像 $m\mathbb Z$（$m>1$）这样的环没有单位元，本节暂时不把它放进特征的定义中。
+
+设 $R$ 是含幺环。定义映射
+\[
+\varphi:\mathbb Z\to R,\qquad n\mapsto n1_R.
+\]
+这里 $n1_R$ 表示 $1_R$ 的 $n$ 倍：正整数时是反复相加，$0$ 时为 $0_R$，负整数时取加法逆元。
+这个映射保持加法，因为
+\[
+\varphi(m+n)=(m+n)1_R=m1_R+n1_R=\varphi(m)+\varphi(n).
+\]
+它也保持乘法。直观地说，$(m1_R)(n1_R)$ 就是把 $m1_R$ 重复加 $n$ 次，结果为 $(mn)1_R$；因此
+\[
+\varphi(mn)=(mn)1_R=(m1_R)(n1_R)=\varphi(m)\varphi(n).
+\]
+并且 $\varphi(1)=1_R$。
+所以 $\varphi$ 是一个保持单位元的环同态。
+
+\begin{definition}[含幺环的特征]\label{def:ring-characteristic}
+设 $R$ 是含幺环，并令
+\[
+\varphi:\mathbb Z\to R,\qquad n\mapsto n1_R.
+\]
+由于 $\ker\varphi$ 是 $\mathbb Z$ 的加法子群，必形如 $m\mathbb Z$，其中 $m\geq0$。
+称这个整数 $m$ 为 $R$ 的\textbf{特征}，记为
+\[
+\operatorname{char}(R)=m.
+\]
+\end{definition}
+
+这个定义可以换成更直观的说法。
+若存在正整数 $m$ 使得
+\[
+m1_R=0_R,
+\]
+则 $\operatorname{char}(R)$ 就是满足这个等式的最小正整数。
+若不存在这样的正整数，则 $\ker\varphi=\{0\}$，也就是 $\operatorname{char}(R)=0$。
+因此环的特征仍然是在测量"$1_R$ 加多少次第一次回到 $0_R$"；只是现在对象从域扩大到了含幺环。
+
+几个基本例子可以帮助区分域和一般环的情况。
+在 $\mathbb Z$ 中，$1$ 加任意正整数次都不等于 $0$，所以
+\[
+\operatorname{char}(\mathbb Z)=0.
+\]
+在剩余类环 $\mathbb Z/n\mathbb Z$ 中，$n$ 个 $\overline{1}$ 相加等于 $\overline{0}$，而更小的正整数不会做到这一点，所以
+\[
+\operatorname{char}(\mathbb Z/n\mathbb Z)=n.
+\]
+特别地，$\mathbb Z/6\mathbb Z$ 的特征是 $6$。
+这和域的情形不同：一般环的特征不一定是素数。
+原因也很清楚，$\mathbb Z/6\mathbb Z$ 中有零因子，例如 $\overline2\cdot\overline3=\overline0$。
+
+矩阵环的特征则由系数环决定。
+更一般地，若 $R$ 是含幺环，则 $M_n(R)$ 的单位元是单位矩阵 $I_n$，其中对角线上每一项都是 $1_R$。
+于是
+\[
+mI_n=0
+\]
+当且仅当这个零矩阵的每个对角元都为 $0_R$，也就是
+\[
+m1_R=0_R.
+\]
+所以
+\[
+\operatorname{char}(M_n(R))=\operatorname{char}(R).
+\]
+特别地，取 $R=F$ 为域，就得到 $\operatorname{char}(M_n(F))=\operatorname{char}(F)$。
+
+同理，若 $G$ 是有限群，则群代数 $F[G]$ 的单位元是 $1_F e$，其中 $e$ 是群 $G$ 的单位元。
+于是
+\[
+m(1_F e)=(m1_F)e.
+\]
+由于群代数以 $G$ 中元素为一组 $F$-基，基向量 $e$ 前的系数为零当且仅当 $m1_F=0$。
+因此
+\[
+\operatorname{char}(F[G])=\operatorname{char}(F).
+\]
+
+从同态的角度看，$\varphi:\mathbb Z\to R$ 的核已经带有理想的雏形。
+这里暂时只需要知道：核记录了哪些整数倍的 $1_R$ 变成 $0_R$，而 $\mathbb Z$ 的加法子群形如 $m\mathbb Z$，所以这个记录最终可以压缩成一个整数 $m$。
+
+\begin{theorem}[整环的特征]\label{thm:domain-characteristic}
+设 $R$ 是整环。
+若存在 $a\in R$，$a\neq0$，以及正整数 $m$，使得
+\[
+ma=0,
+\]
+则存在素数 $p$，使得对任意 $b\in R$ 都有
+\[
+pb=0.
+\]
+特别地，整环的特征只能是 $0$ 或素数。
+\end{theorem}
+
+\begin{proof}
+先证明一个更强的中间结论：由某个非零元 $a$ 满足 $ma=0$，可以推出所有元素都满足 $mb=0$。
+任取 $b\in R$。
+若 $b=0$，结论显然成立。
+若 $b\neq0$，则
+\[
+0=(ma)b=a(mb).
+\]
+这里第一等号来自 $ma=0$，第二个等号来自 $ma$ 的定义：$ma$ 是 $a$ 的 $m$ 倍，$(ma)b$ 就是把 $b$ 乘上这个倍数。
+因为 $R$ 是整环，没有零因子；又 $a\neq0$，所以必须有
+\[
+mb=0.
+\]
+于是对任意 $b\in R$ 都有 $mb=0$。
+
+特别地，取 $b=1_R$，得到
+\[
+m1_R=0.
+\]
+所以 $R$ 有正特征。设 $p$ 是使得 $p1_R=0$ 的最小正整数。
+下面证明 $p$ 必为素数。
+
+反设 $p$ 不是素数，则可以写成
+\[
+p=qr,\qquad q,r>1.
+\]
+由 $p1_R=0$ 得
+\[
+0=p1_R=(qr)1_R=(q1_R)(r1_R).
+\]
+整环无零因子，所以
+\[
+q1_R=0\qquad\text{或}\qquad r1_R=0.
+\]
+但 $q,r$ 都是小于 $p$ 的正整数，这与 $p$ 的最小性矛盾。
+因此 $p$ 是素数。
+
+最后，对任意 $b\in R$，
+\[
+pb=(p1_R)b=0\cdot b=0.
+\]
+这说明一旦整环中有非零元素在加法下具有有限阶，整个整环都会落在同一个素特征 $p$ 下。
+反过来说，如果没有任何正整数使 $1_R$ 归零，那么整环的特征就是 $0$。
+所以整环的特征只能是 $0$ 或素数。
+\end{proof}
+
+\section{模与代数}\label{sec:modules-and-algebras}
 
 \subsection{模的定义}\label{sec:module-definition}
 
@@ -365,10 +598,10 @@ q^{-1}=\frac{\overline q}{q\overline q}
 在线性空间里，向量可以相加，标量可以相加和相乘，标量还可以作用在向量上。
 如果把标量所在的域换成一般的环，就得到模的概念。
 
-这里要同时盯住两个集合。
-一个是被作用的集合，通常记为 $M$；它至少要能做加法，并且在加法下构成阿贝尔群。
-另一个是作用集合，也就是环 $R$；它自身有加法和乘法。
-再加上一个外部作用
+这里涉及两个集合和一个外部作用。
+被作用的集合通常记为 $M$，它至少要能做加法，并且在加法下构成阿贝尔群。
+作用集合是环 $R$，它自身有加法和乘法。
+外部作用是一个映射
 \[
 R\times M\to M,\qquad (r,x)\mapsto rx,
 \]
@@ -399,7 +632,7 @@ R\times M\to M,\qquad (r,x)\mapsto rx,
 \[
 (rs)x=r(sx).
 \]
-这就是"左"字真正出现的地方。
+这条公理 $(rs)x = r(sx)$ 正是"左"的含义所在：环中先乘 $rs$ 再作用到 $x$，等于先让 $s$ 作用、再让 $r$ 作用——作用顺序与乘法顺序相反。
 
 右模的定义类似，只是作用写在右边：
 \[
@@ -409,13 +642,14 @@ M\times R\to M,\qquad (x,r)\mapsto xr.
 \[
 (xr)s=x(rs).
 \]
-也就是说，左模中 $rs$ 对 $x$ 的作用顺序表现为先 $s$ 后 $r$；右模中则按右侧作用的顺序写出来。
+也就是说，左模的乘法相容性 $(rs)x = r(sx)$ 表现为：先让 $s$ 作用到 $x$，再让 $r$ 作用——与环中 $rs$ 的书写顺序相反。
+右模的乘法相容性 $(xr)s = x(rs)$ 则表现为：先让 $r$ 作用，再让 $s$ 作用——与环中 $rs$ 的书写顺序一致。
 如果 $R$ 是交换环，左作用和右作用通常可以互相转换，因此两者差别不明显。
 但在非交换环上，这个区别不能省略。
 
 双模也是沿着这个方向继续推广：同一个阿贝尔群可以同时有左侧环作用和右侧环作用，并要求两边作用彼此相容。
 本讲义暂时不展开双模。
-一个可以先记住的例子是：开集上的光滑函数可以被微分算子作用，这背后就自然出现环作用和模的语言。
+在几何与分析中，模的语言也会自然出现：例如开集上的光滑函数环可以被微分算子环作用，前者就成为后者的模。
 
 \subsection{模的例子}\label{sec:module-examples}
 
@@ -438,7 +672,7 @@ na=\underbrace{a+\cdots+a}_{n\text{ 次}},\qquad n>0,
 (mn)a=m(na)
 \]
 对应整数乘法。
-当 $m,n$ 中有负数时，上述等式由 $(-n)a=-(na)$ 和加法逆元的唯一性继续成立。
+当 $m,n$ 中有负数时，利用 $(-n)a=-(na)$ 的定义直接验证即可。
 反过来，任意 $\mathbb Z$-模只看它自身的加法，就得到一个阿贝尔群。
 因此，$\mathbb Z$-模和阿贝尔群本质上是同一类对象。
 
@@ -479,7 +713,7 @@ f(t)\cdot(x+y)=f(T)(x+y)=f(T)(x)+f(T)(y).
 常数多项式 $1$ 代入 $T$ 后是恒等映射，所以 $1\cdot x=x$。
 
 这个例子很重要，因为它把"一个线性空间加上一个线性变换"翻译成了"一个多项式环上的模"。
-例如线性代数中研究 $T$ 的不变子空间、特征多项式、最小多项式，很多都可以放进这个模的语言里重新理解。
+例如，$T$ 的不变子空间恰好就是 $R$-子模，特征多项式和最小多项式的研究也可以在模的框架下统一处理。
 
 \paragraph*{例 10：矩阵环作用在列向量上}
 设 $A$ 是交换环。
@@ -515,7 +749,9 @@ B(x+y)=Bx+By,
 \]
 和 $\rho(e)=\operatorname{id}_V$。
 
-现在把这个表示变成 $F[G]$-模。
+表示一开始只告诉我们：每个群元素 $g$ 怎么作用在 $V$ 上。
+群代数 $F[G]$ 的元素是群元素的线性组合，所以最自然的想法是：让每个群元素先按表示作用，再把结果按系数线性组合。
+
 对群代数中的元素
 \[
 \alpha=\sum_{g\in G}a_g g
@@ -524,8 +760,14 @@ B(x+y)=Bx+By,
 \[
 \alpha\cdot v=\sum_{g\in G}a_g\rho(g)(v).
 \]
-这就是先让每个 $g$ 通过表示作用在 $v$ 上，再按系数作线性组合。
-因为 $V$ 是 $F$-向量空间，所以加法分配律
+这就是把基元素的作用
+\[
+g\cdot v=\rho(g)(v)
+\]
+按线性性扩展到整个群代数。
+
+先看加法方面。
+因为 $V$ 是 $F$-向量空间，线性组合可以逐项拆开，所以
 \[
 \alpha\cdot(v+w)=\alpha\cdot v+\alpha\cdot w
 \]
@@ -533,19 +775,40 @@ B(x+y)=Bx+By,
 \[
 (\alpha+\beta)\cdot v=\alpha\cdot v+\beta\cdot v
 \]
-都来自线性性。
+都直接来自 $\rho(g)$ 的线性性和系数加法。
 
-乘法相容性来自表示本身保持群乘法。
-先对基元素看：
+真正需要看的是乘法相容性。
+先看基元素。若 $g,h\in G$，则
 \[
 (gh)\cdot v=\rho(gh)(v)=\rho(g)(\rho(h)(v))=g\cdot(h\cdot v).
 \]
-再按双线性扩展到一般的 $\alpha,\beta\in F[G]$，就得到
+这里用到的正是表示的同态条件 $\rho(gh)=\rho(g)\rho(h)$。
+
+一般元素只是把这个等式按双线性展开。
+若
 \[
-(\alpha\beta)\cdot v=\alpha\cdot(\beta\cdot v).
+\alpha=\sum_{g\in G}a_g g,\qquad \beta=\sum_{h\in G}b_h h,
 \]
-群单位元 $e$ 的作用是 $\rho(e)=\operatorname{id}_V$，所以 $1_{F[G]}\cdot v=v$。
+那么 $\alpha\beta$ 中由一对 $(g,h)$ 贡献的项是 $a_gb_h(gh)$。
+这个基元素作用到 $v$ 上，给出
+\[
+a_gb_h\rho(gh)(v)=a_gb_h\rho(g)(\rho(h)(v)).
+\]
+把所有 $g,h$ 的贡献加起来，就得到
+\[
+(\alpha\beta)\cdot v
+=\sum_{g,h\in G}a_gb_h\rho(gh)(v)
+=\sum_{g,h\in G}a_gb_h\rho(g)(\rho(h)(v))
+=\alpha\cdot(\beta\cdot v).
+\]
+最后一个等号来自：$\beta\cdot v=\sum_h b_h\rho(h)(v)$，再让 $\alpha$ 作用即得。
+
+群代数的单位元是 $1_F e$，而 $\rho(e)=\operatorname{id}_V$，所以
+\[
+(1_F e)\cdot v=v.
+\]
 因此表示空间 $V$ 成为一个左 $F[G]$-模。
+证明的核心是群代数乘法中的 $gh$ 与表示条件 $\rho(gh)=\rho(g)\rho(h)$ 的吻合。
 
 反过来，若给定一个左 $F[G]$-模 $V$，把群元素 $g\in G$ 看作 $F[G]$ 中的基元素，它对 $V$ 的作用就是一个线性变换。
 由于 $g^{-1}$ 也在群中，$g$ 的作用有逆作用，所以得到 $\rho(g)\in\operatorname{GL}(V)$。
@@ -557,12 +820,12 @@ B(x+y)=Bx+By,
 这把"群元素如何线性地作用"统一放进了环作用的框架里。
 
 类似地，quiver 表示也和路径代数上的模密切相关。
-把每个顶点放一个向量空间、每条箭头放一个线性映射，这些数据可以由路径代数的作用组织起来。
-这个联系会在表示论中继续展开，这里先作为路径代数与模之间的一个路标。
+在每个顶点放一个向量空间、每条箭头放一个线性映射，这些数据可以由路径代数的作用组织起来。
+这个联系会在表示论中继续展开。
 
 \subsection{代数的定义}\label{sec:algebra-definition}
 
-最后再补充代数的概念。
+在此基础上，再引入代数的概念。
 如果 $A$ 只是一个 $R$-模，那么 $A$ 中的元素可以相加，也可以被 $R$ 中元素作用，但 $A$ 自己的元素之间未必能相乘。
 如果 $A$ 自身还有一个乘法，并且这个乘法和 $R$-模结构相容，就得到 $R$-代数。
 
@@ -580,7 +843,7 @@ r(x+y)=rx+ry,\qquad r(xy)=(rx)y=x(ry),
 若 $A$ 有乘法单位元，还通常要求 $R$ 的单位元作用为 $A$ 的单位元。
 \end{definition}
 
-可以把这句话压缩成一个记忆方式：
+概括为一句话：
 \[
 \text{$R$-代数}=\text{带有相容乘法的 $R$-模}.
 \]
@@ -598,3 +861,1653 @@ r(zw)=(rz)w=z(rw),\qquad r\in\mathbb R,\ z,w\in\mathbb C.
 这个等式成立，是因为实数 $r$ 在复数乘法中可以看成复数 $r+0i$，并且它与任意复数相乘都交换、结合。
 因此 $\mathbb C$ 是一个 $\mathbb R$-代数。
 这个例子说明，代数并不是又凭空多造了一个对象；它只是把"标量作用"和"对象内部的乘法"同时记在同一个结构里。
+
+\paragraph*{补充：$K$-代数和 $R$-代数的区别}
+
+有时书上写 $K$-代数，有时写 $R$-代数，二者的本质差别在于底层标量对象不同。
+通常 $K$ 表示一个域，而 $R$ 表示一个交换含幺环。
+
+如果 $K$ 是域，那么一个 $K$-代数 $A$ 首先是一个 $K$-向量空间。
+也就是说，$A$ 中的元素可以按 $K$ 中的标量做线性组合。
+同时 $A$ 自己还带有乘法，并且这个乘法要和 $K$-向量空间结构相容：
+\[
+\lambda(xy)=(\lambda x)y=x(\lambda y),\qquad
+\lambda\in K,\ x,y\in A.
+\]
+所以可以把它记成
+\[
+\text{$K$-代数}=\text{带有相容乘法的 $K$-向量空间}.
+\]
+
+如果 $R$ 只是一般交换含幺环，那么一个 $R$-代数 $A$ 首先只是一个 $R$-模，而不一定是向量空间。
+这时仍然要求 $A$ 有自己的乘法，并且满足
+\[
+r(xy)=(rx)y=x(ry),\qquad r\in R,\ x,y\in A.
+\]
+因此
+\[
+\text{$R$-代数}=\text{带有相容乘法的 $R$-模}.
+\]
+
+这说明 $K$-代数其实是 $R$-代数的一个特殊情形：当底环 $R$ 恰好是域 $K$ 时，$R$-模就是 $K$-向量空间。
+域上的向量空间性质更好，例如基和维数理论完备；一般环上的模则可能有挠元，也可能不是自由模，所以 $R$-代数比 $K$-代数更一般，也更复杂。
+
+从含幺代数的角度看，还可以用结构映射来理解。
+给 $A$ 一个含幺 $R$-代数结构，等价于给一个环同态
+\[
+R\to Z(A),
+\]
+把 $R$ 中的标量送进 $A$ 的中心。
+这样 $r\in R$ 才能在 $A$ 中像标量一样左右移动，保证
+\[
+(rx)y=x(ry).
+\]
+若把 $R$ 换成域 $K$，同样得到 $K\to Z(A)$，只是此时 $A$ 还自动带有 $K$-向量空间结构。
+
+例如 $\mathbb C$ 是一个 $\mathbb R$-代数，因为复数可以看成实向量空间，并且复数乘法与实数标量乘法相容。
+而 $\mathbb Z[x]$ 是一个 $\mathbb Z$-代数：它是一个环，也是一个 $\mathbb Z$-模，但这里的底层结构不是向量空间，而是整数模。
+所以看到"$K$-代数"时，可以先想到"域上的线性结构加乘法"；看到"$R$-代数"时，则要提醒自己：标量可能只是一个环，底层对象只是模。
+
+\section{同态、子结构与理想}\label{sec:hom-substructure-ideals}
+
+\subsection{环和模的同态}\label{sec:ring-module-homomorphism}
+
+有了环和模以后，下一步自然要问：两个这样的对象之间，什么样的映射才算"保持结构"？
+在域论里，同态要保持加法、乘法和单位元；环和模的情形更灵活一些，因为环未必有单位元，模还带有外部作用。
+
+\begin{definition}[环同态]\label{def:ring-homomorphism}
+设 $R,S$ 是两个环。
+映射
+\[
+f:R\to S
+\]
+称为一个\textbf{环同态}，如果对任意 $a,b\in R$ 都有
+\[
+f(a+b)=f(a)+f(b),\qquad f(ab)=f(a)f(b).
+\]
+若 $R,S$ 都有单位元，并且还满足
+\[
+f(1_R)=1_S,
+\]
+则称 $f$ 是\textbf{保持单位元的环同态}。
+\end{definition}
+
+关于单位元的条件，不同教材有不同约定。
+有的教材把 $f(1_R)=1_S$ 放进环同态的定义里；也有教材只要求保持加法和乘法，把保持单位元作为额外条件。
+本讲义在需要单位元参与的地方会明确说明"保持单位元"。
+这样做的好处是可以同时容纳无单位元环，也能解释一些自然出现但不保持单位元的映射。
+
+环同态会自动保持零元。
+因为
+\[
+f(0_R)=f(0_R+0_R)=f(0_R)+f(0_R),
+\]
+两边同时加上 $-f(0_R)$，得到 $f(0_R)=0_S$。
+同样地，环同态也保持加法逆元：
+\[
+0_S=f(0_R)=f(a+(-a))=f(a)+f(-a),
+\]
+所以 $f(-a)=-f(a)$。
+
+\begin{definition}[模同态]\label{def:module-homomorphism}
+设 $M,N$ 是同一个环 $R$ 上的左模。
+映射
+\[
+T:M\to N
+\]
+称为一个\textbf{$R$-模同态}，如果对任意 $x,y\in M$ 和 $r\in R$ 都有
+\[
+T(x+y)=T(x)+T(y),\qquad T(rx)=rT(x).
+\]
+\end{definition}
+
+第一条说明 $T$ 保持模自身的加法；第二条说明 $T$ 和 $R$ 的作用相容。
+如果把线性空间看成域上的模，那么模同态就是线性映射。
+所以模同态并不是新造的概念，而是把"线性映射"从域上的向量空间推广到环上的模。
+
+\paragraph*{环同态的例子}
+一个典型的环同态来自剩余类环。
+设 $m,n$ 是正整数，定义
+\[
+\pi:\mathbb Z/(mn)\mathbb Z\to \mathbb Z/m\mathbb Z,\qquad
+[a]_{mn}\mapsto [a]_m.
+\]
+这个映射是良定义的：如果 $a\equiv b\pmod{mn}$，那么 $mn\mid(a-b)$，特别地 $m\mid(a-b)$，所以 $a\equiv b\pmod m$。
+它显然保持加法和乘法，也保持单位元。
+因此 $\pi$ 是一个满的环同态。
+
+反方向一般没有这样的自然同态。
+如果想把
+\[
+\mathbb Z/m\mathbb Z\to \mathbb Z/(mn)\mathbb Z
+\]
+也写成 $[a]_m\mapsto[a]_{mn}$，就会遇到良定义问题：在 $\mathbb Z/m\mathbb Z$ 中，$[0]_m=[m]_m$，但在 $\mathbb Z/(mn)\mathbb Z$ 中，$[0]_{mn}$ 和 $[m]_{mn}$ 通常不同。
+若要求保持单位元，这个障碍更直接：从 $\mathbb Z/m\mathbb Z$ 出发时，$m\cdot 1=0$，但在 $\mathbb Z/(mn)\mathbb Z$ 中通常有 $m\cdot1\neq0$。
+
+\paragraph*{模同态的例子}
+模同态的例子可以从更熟悉的 $\mathbb Z$-模来看。
+把阿贝尔群都看成 $\mathbb Z$-模，则自然投影
+\[
+q:\mathbb Z\to \mathbb Z/m\mathbb Z,\qquad a\mapsto [a]_m
+\]
+是一个 $\mathbb Z$-模同态。
+它保持加法，并且整数倍作用与映射相容：
+\[
+q(ra)=[ra]_m=r[a]_m=rq(a).
+\]
+这个例子中
+\[
+\ker q=m\mathbb Z,\qquad \operatorname{im}q=\mathbb Z/m\mathbb Z.
+\]
+
+和群、域的情形一样，环同态和模同态也可以分为单同态、满同态和同构。
+对同态 $f:R\to S$，定义
+\[
+\ker f=\{a\in R:f(a)=0\},\qquad
+\operatorname{im}f=\{f(a):a\in R\}.
+\]
+同态是单射，当且仅当 $\ker f=\{0\}$；同态是满射，当且仅当 $\operatorname{im}f=S$。
+对模同态 $T:M\to N$，核与像定义为
+\[
+\ker T=\{x\in M:T(x)=0_N\},\qquad
+\operatorname{im}T=\{T(x):x\in M\}.
+\]
+其中 $\ker T$ 是 $M$ 的子模，$\operatorname{im}T$ 是 $N$ 的子模。
+模同态 $T$ 是单射，当且仅当 $\ker T=\{0\}$；是满射，当且仅当 $\operatorname{im}T=N$。
+
+\subsection{子结构：子环与子模}\label{sec:substructures}
+
+同态告诉我们怎样在两个对象之间传递结构；子结构则回答另一个问题：一个对象内部的哪些子集本身仍然是同类对象？
+
+\begin{definition}[子环]\label{def:subring}
+设 $R$ 是环，$S\subseteq R$。
+若 $S$ 在 $R$ 的加法和乘法下本身构成一个环，则称 $S$ 是 $R$ 的\textbf{子环}。
+\end{definition}
+
+本讲义采用的约定是：子环不要求包含原环的乘法单位元。
+这和理想的讨论更相容，因为理想通常不会含有 $1$；一旦某个理想含有 $1$，它就会等于整个环。
+例如 $2\mathbb Z$ 是 $\mathbb Z$ 的子环，但它不含 $\mathbb Z$ 的单位元 $1$。
+
+\begin{theorem}[子环判定]\label{thm:subring-test}
+设 $S\subseteq R$，若
+\[
+S\neq\varnothing,\qquad a-b\in S,\qquad ab\in S\quad(a,b\in S),
+\]
+则 $S$ 是 $R$ 的子环。
+\end{theorem}
+
+\begin{proof}
+因为 $S\neq\varnothing$，可取 $a\in S$。
+由 $a-b\in S$，取 $b=a$ 得
+\[
+0=a-a\in S.
+\]
+再取 $a=0$，对任意 $b\in S$，得到
+\[
+-b=0-b\in S.
+\]
+于是对任意 $a,b\in S$，
+\[
+a+b=a-(-b)\in S.
+\]
+所以 $S$ 对加法封闭，并且含有零元和每个元素的加法逆元。
+条件 $ab\in S$ 保证乘法封闭。
+结合律和分配律不需要重新证明，因为它们直接继承自 $R$。
+因此 $S$ 是 $R$ 的子环。
+\end{proof}
+
+\begin{definition}[子模]\label{def:submodule}
+设 $M$ 是左 $R$-模，$N\subseteq M$。
+若 $N$ 在 $M$ 的加法下构成子阿贝尔群，并且对任意 $r\in R$、$x\in N$ 都有
+\[
+rx\in N,
+\]
+则称 $N$ 是 $M$ 的\textbf{子模}。
+\end{definition}
+
+子模的条件比子环更像线性代数中的子空间：不仅要对加法和取负封闭，还要对标量作用封闭。
+若 $R$ 是域，这正是子空间的定义。
+若 $R$ 是一般环，子模则是子空间概念的模论版本。
+
+现在把环 $R$ 看成它自身上的左模，作用就是左乘。
+这时一个子模 $I\subseteq R$ 要满足
+\[
+a-b\in I,\qquad r a\in I\quad(r\in R,\ a\in I).
+\]
+这已经非常接近理想的定义。
+若同时要求右乘也封闭，即 $ar\in I$，就得到后面要用的双边理想。
+所以理想可以理解为：当环 $R$ 看作自身上的左模时，那些同时对左乘和右乘封闭的子模。
+
+前面已经讲过群表示和 $F[G]$-模的关系。
+从子结构角度看，表示中的不变子空间正是对应模的子模：一个子空间如果被所有群元素作用后仍留在自身中，就等价于它对整个群代数 $F[G]$ 的作用封闭。
+这正是模语言把表示论组织起来的原因。
+
+\subsection{核、像与理想}\label{sec:kernels-images-ideals}
+
+同态的核与像都来自同一个问题：一个结构经过映射以后，哪些东西被送到 $0$，哪些东西真的出现在目标里？
+但在环论里，核比像更特别。
+它不只是一个子环，还会被整个定义域的乘法吸收。
+这个额外性质正是理想的来源。
+
+设 $f:R\to S$ 是环同态。
+先看核
+\[
+\ker f=\{a\in R:f(a)=0\}.
+\]
+它是 $R$ 的子环。若 $a,b\in\ker f$，则
+\[
+f(a-b)=f(a)-f(b)=0-0=0,
+\]
+所以 $a-b\in\ker f$；又
+\[
+f(ab)=f(a)f(b)=0\cdot0=0,
+\]
+所以 $ab\in\ker f$。
+
+像
+\[
+\operatorname{im}f=\{f(a):a\in R\}
+\]
+也是 $S$ 的子环。
+例如两个像元素 $f(a),f(b)$ 的差和积分别是
+\[
+f(a)-f(b)=f(a-b),\qquad f(a)f(b)=f(ab),
+\]
+仍然落在像中。
+
+现在看核真正多出来的性质。
+若 $a\in\ker f$，$r\in R$，则
+\[
+f(ra)=f(r)f(a)=f(r)\cdot0=0,
+\]
+所以 $ra\in\ker f$。
+同理，
+\[
+f(ar)=f(a)f(r)=0\cdot f(r)=0,
+\]
+所以 $ar\in\ker f$。
+也就是说，核不仅对自身的加减乘封闭，还能被整个环从左、右两边相乘而不跑出去。
+既然这个性质会反复出现，我们就把满足这种吸收性的加法子群单独命名。
+
+\begin{definition}[理想]\label{def:ideal}
+设 $R$ 是环，$I\subseteq R$。
+若 $I$ 是 $R$ 的加法子群，并且对任意 $r\in R$、$a\in I$ 都有
+\[
+ra\in I,\qquad ar\in I,
+\]
+则称 $I$ 是 $R$ 的\textbf{双边理想}，简称\textbf{理想}。
+\end{definition}
+
+如果 $R$ 是交换环，左右乘法没有区别，所以只需写
+\[
+rI\subseteq I,\qquad r\in R.
+\]
+若 $R$ 非交换，则需要区分左理想、右理想和双边理想。
+左理想只要求 $ra\in I$，右理想只要求 $ar\in I$；能用来构造商环的通常是双边理想。
+
+上面的计算说明：环同态的核一定是理想。
+这也解释了为什么前面讨论环的特征时，映射
+\[
+\varphi:\mathbb Z\to R,\qquad n\mapsto n1_R
+\]
+的核会自然出现。
+它不仅是 $\mathbb Z$ 的一个加法子群，更是 $\mathbb Z$ 的一个理想；而 $\mathbb Z$ 的理想都形如 $m\mathbb Z$，于是特征就被一个整数记录下来。
+
+\subsection{理想的基本性质与主理想}\label{sec:ideal-basic-properties}
+
+理想的定义看起来只是一个封闭性条件，但它对环的结构限制很强。
+最简单的性质是：一旦理想里出现单位元，它就不再是一个"小"的子结构。
+
+\begin{proposition}[含有单位元的理想]\label{prop:ideal-containing-one}
+设 $R$ 是含幺环，$I$ 是 $R$ 的理想。
+若 $1_R\in I$，则 $I=R$。
+\end{proposition}
+
+\begin{proof}
+任取 $r\in R$。
+因为 $1_R\in I$，且理想对环中元素的乘法吸收，所以
+\[
+r=r1_R\in I.
+\]
+因此 $R\subseteq I$。
+反过来 $I\subseteq R$ 本来就成立，所以 $I=R$。
+\end{proof}
+
+这个性质在域里给出一个非常强的结论。
+
+\begin{proposition}[域只有平凡理想]\label{prop:field-ideals}
+设 $F$ 是域。
+则 $F$ 的理想只有 $\{0\}$ 和 $F$。
+\end{proposition}
+
+\begin{proof}
+设 $I$ 是 $F$ 的理想。
+若 $I=\{0\}$，已经是平凡理想。
+否则，取非零元素 $a\in I$。
+因为 $F$ 是域，$a$ 有乘法逆元 $a^{-1}$。
+由理想的吸收性，
+\[
+1=a^{-1}a\in I.
+\]
+于是由命题 \ref{prop:ideal-containing-one} 得 $I=F$。
+\end{proof}
+
+这和域同态必为单射的现象是同一件事的两个侧面。
+域同态的核是理想，而域的理想只有 $\{0\}$ 和整个域；如果同态保持单位元，核不可能是整个域，所以只能是 $\{0\}$。
+
+在交换环中，最常见的一类理想由单个元素生成。
+设 $R$ 是交换环，$a\in R$，定义
+\[
+(a)=aR=\{ar:r\in R\}.
+\]
+这是一个理想。
+若 $ar,as\in aR$，则
+\[
+ar-as=a(r-s)\in aR;
+\]
+对任意 $t\in R$，
+\[
+t(ar)=a(tr)\in aR.
+\]
+所以 $aR$ 对加减和环中元素乘法都封闭。
+这样的理想称为由 $a$ 生成的\textbf{主理想}。
+
+"理想"这个名字来自代数数论中对唯一分解失败的修正。
+早期说的是"理想数"，后来对象本身逐渐抽象成环中的特殊子集，名称也就简化为"理想"。
+这里不展开历史，只需要记住它的代数功能：理想是环同态的核，也是构造商环时用来做"除法"的对象。
+
+整数环中的理想是最基本的主理想例子。
+
+\begin{theorem}[$\mathbb Z$ 的理想]\label{thm:z-ideals-principal}
+$\mathbb Z$ 中每个理想都形如 $m\mathbb Z$。
+\end{theorem}
+
+\begin{proof}
+设 $I$ 是 $\mathbb Z$ 的理想。
+若 $I=\{0\}$，则 $I=0\mathbb Z$。
+下面设 $I\neq\{0\}$。
+
+因为 $I$ 是加法子群，若 $n\in I$，则 $-n\in I$。
+所以 $I$ 中存在正整数。
+取 $I$ 中最小的正整数 $m$。
+由于 $m\in I$，理想对整数乘法封闭，所以
+\[
+m\mathbb Z\subseteq I.
+\]
+
+反过来，任取 $n\in I$。
+用带余除法写
+\[
+n=qm+r,\qquad 0\leq r<m.
+\]
+因为 $n\in I$，$qm\in I$，所以
+\[
+r=n-qm\in I.
+\]
+若 $r>0$，就得到一个比 $m$ 更小的正整数属于 $I$，与 $m$ 的最小性矛盾。
+因此 $r=0$，即 $m\mid n$。
+所以 $n\in m\mathbb Z$。
+
+综上，$I=m\mathbb Z$。
+\end{proof}
+
+\paragraph*{例：一元多项式环}
+
+$\mathbb Z$ 中每个理想都是主理想，这来自整数的带余除法。
+同样的思想也出现在一元多项式环中。
+这里以 $\mathbb C[x]$ 为例；事实上，任意域 $F$ 上的一元多项式环 $F[x]$ 都有相同性质。
+
+\begin{theorem}[$\mathbb C[x]$ 是主理想整环]\label{thm:cx-pid}
+$\mathbb C[x]$ 中每个理想都是主理想。
+\end{theorem}
+
+\begin{proof}
+设 $I$ 是 $\mathbb C[x]$ 的理想。
+若 $I=\{0\}$，则 $I=(0)$。
+下面设 $I\neq\{0\}$。
+
+如果 $I$ 中含有非零常数 $c$，那么 $c$ 在 $\mathbb C[x]$ 中可逆，且 $c^{-1}c=1$。
+于是 $1\in I$，从而 $I=\mathbb C[x]=(1)$。
+所以对真理想来说，它不能含有非零常数。
+
+现在考虑非零真理想的情形。
+在 $I$ 的非零多项式中，取次数最小的一个，记为 $P(x)$。
+我们证明 $I=(P)$。
+由于 $P\in I$，显然有
+\[
+(P)\subseteq I.
+\]
+
+反过来，任取 $f(x)\in I$。
+用多项式带余除法除以 $P(x)$：
+\[
+f(x)=q(x)P(x)+r(x),\qquad r(x)=0\ \text{或}\ \deg r<\deg P.
+\]
+因为 $f(x)\in I$，$q(x)P(x)\in I$，所以
+\[
+r(x)=f(x)-q(x)P(x)\in I.
+\]
+若 $r(x)\neq0$，它就是 $I$ 中次数比 $P$ 更低的非零多项式，矛盾。
+因此 $r(x)=0$，即 $P$ 整除 $f$。
+所以 $f\in(P)$。
+
+于是 $I\subseteq(P)$，从而 $I=(P)$。
+\end{proof}
+
+这个证明和 $\mathbb Z$ 的证明完全平行：都取一个"最小"对象，然后用带余除法把任意元素除过去，余数若非零就违反最小性。
+整数里"最小"指的是绝对值最小的正整数；一元多项式里"最小"指的是次数最低。
+
+但多元多项式环就不再这么简单。
+例如 $\mathbb C[x,y]$ 是整环，却不是主理想环。
+考虑理想
+\[
+(x,y)=\{xf(x,y)+yg(x,y):f,g\in\mathbb C[x,y]\}.
+\]
+它由 $x$ 和 $y$ 共同生成。
+如果它是主理想，设
+\[
+(x,y)=(h).
+\]
+因为 $x,y\in(h)$，所以 $h$ 同时整除 $x$ 和 $y$。
+在 $\mathbb C[x,y]$ 中，$x$ 和 $y$ 没有非常数公因子，因此 $h$ 只能是非零常数。
+但若 $h$ 是非零常数，则 $(h)=\mathbb C[x,y]$，会推出 $1\in(x,y)$。
+这不可能，因为 $xf(x,y)+yg(x,y)$ 的常数项总是 $0$。
+所以 $(x,y)$ 不是主理想。
+
+这个例子说明，"整环"和"主理想环"是两种不同性质。
+$\mathbb C[x,y]$ 没有零因子，但它的理想已经比一元多项式环复杂得多。
+后面讨论商环时，理想的这种复杂性会继续出现。
+
+\subsection{生成理想与双边理想}\label{sec:generated-two-sided-ideals}
+
+在具体计算中，我们经常不是先拿到一个完整的理想，而是先指定若干元素，然后问：包含这些元素的最小理想是什么？
+这就是生成理想。
+
+圆括号 $(a)$ 常用来表示由 $a$ 生成的理想。
+这个记号和商环中的等价类记号有时会同时出现，所以阅读时要看上下文：在"生成"语境中，$(a)$ 是理想；在"模掉某个理想"的语境中，$a+I$ 或 $\overline a$ 才是等价类。
+
+若 $R$ 是交换含幺环，最常用的形式非常简单：
+\[
+(a_1,\dots,a_m)=Ra_1+\cdots+Ra_m.
+\]
+也就是说，$(a_1,\dots,a_m)$ 中的元素都是有限和
+\[
+r_1a_1+\cdots+r_ma_m,\qquad r_i\in R.
+\]
+它是包含 $a_1,\dots,a_m$ 的最小理想。
+例如在 $\mathbb C[x,y]$ 中，
+\[
+(x,y)=\{xf(x,y)+yg(x,y):f,g\in\mathbb C[x,y]\}.
+\]
+
+非交换环里要更小心，因为左乘和右乘不一定相同。
+如果要生成双边理想，就必须允许生成元左右两边都乘上环中元素。
+当 $R$ 是含幺环时，由一个元素 $a$ 生成的双边理想为
+\[
+(a)=RaR,
+\]
+也就是所有有限和
+\[
+\sum_{\ell=1}^N r_\ell a s_\ell,\qquad r_\ell,s_\ell\in R.
+\]
+更一般地，由集合 $A\subseteq R$ 生成的双边理想为
+\[
+(A)=RAR
+=\left\{\sum_{\ell=1}^N r_\ell a_\ell s_\ell:
+r_\ell,s_\ell\in R,\ a_\ell\in A,\ N\in\mathbb N\right\}.
+\]
+
+这里含幺条件很重要。
+若 $R$ 有单位元，那么
+\[
+a=1_Ra1_R,
+\]
+所以生成元本身已经包含在 $RaR$ 里。
+但若 $R$ 没有单位元，就不能用 $1_Ra1_R$ 把 $a$ 放进去。
+这时由 $A$ 生成的双边理想需要额外加入生成元本身及其左右倍数：
+\[
+\mathbb ZA+RA+AR+RAR.
+\]
+其中
+\[
+\mathbb ZA
+=\left\{\sum_{\ell=1}^N n_\ell a_\ell:
+n_\ell\in\mathbb Z,\ a_\ell\in A\right\}.
+\]
+所以这里真正需要记住的不是表格，而是差别来源：有单位元时，$a=1a1$；无单位元时，生成元本身不会自动出现在 $RAR$ 里，所以必须额外补进去。
+
+\section{商环和商模}\label{sec:quotient-rings-and-modules}
+
+\subsection{从理想到商环}\label{sec:quotient-ring-construction}
+
+前面讲理想时，我们已经看到：理想是环同态的核，也是构造商环时用来做"除法"的对象。
+现在把第二个作用展开。
+直观地说，理想可以规定哪些元素应该被看成零；一旦这些元素被压成零，原来的环就会折叠成一个新的环。
+
+最熟悉的例子是整数的模 $n$ 运算。
+在 $\mathbb Z/n\mathbb Z$ 中，两个整数如果相差 $n$ 的倍数，就被看成同一个剩余类。
+现在把"相差 $n$ 的倍数"换成"相差一个理想里的元素"。
+设 $R$ 是环，$I$ 是 $R$ 的双边理想。对 $a,b\in R$，定义
+\[
+a\sim b \quad\Longleftrightarrow\quad a-b\in I.
+\]
+这一步本质上只用到了 $I$ 是加法子群。
+因为加法子群对取负和加法封闭，所以这个关系确实给出了 $R$ 的一个划分。
+元素 $a$ 所在的等价类记为
+\[
+a+I=\{a+x:x\in I\}.
+\]
+所有等价类组成的集合记为 $R/I$。
+
+接下来要把 $R$ 中的加法和乘法传到等价类上。最自然的定义是
+\[
+(a+I)+(b+I)=(a+b)+I,
+\qquad
+(a+I)(b+I)=ab+I.
+\]
+这里真正需要检查的是良定义：如果换一个代表元，结果会不会变。
+
+先看加法。若 $a-a'\in I$，$b-b'\in I$，则
+\[
+(a+b)-(a'+b')=(a-a')+(b-b')\in I.
+\]
+所以 $(a+b)+I=(a'+b')+I$，加法不依赖代表元的选择。
+
+乘法要多一步。若仍有 $a-a'\in I$，$b-b'\in I$，则
+\[
+ab-a'b'=(a-a')b+a'(b-b').
+\]
+第一项 $(a-a')b$ 属于 $I$，用到的是 $I$ 对右乘的吸收性；第二项 $a'(b-b')$ 属于 $I$，用到的是 $I$ 对左乘的吸收性。
+因此 $ab-a'b'\in I$，从而 $ab+I=a'b'+I$。
+这正是双边理想在商环构造中出现的原因：在非交换环里，只要求左理想或右理想，一般不能保证商环乘法良定义。
+
+\hypertarget{q:quotient-ring-two-sided}{}
+\medskip
+\noindent\textbf{思考：商环的加法良定义只用到 $I$ 是加法子群，乘法良定义为什么必须要求 $I$ 是双边理想？}（\hyperlink{ans:quotient-ring-two-sided}{跳转到解答}。）
+\medskip
+
+\begin{definition}[商环]\label{def:quotient-ring}
+设 $R$ 是环，$I$ 是 $R$ 的双边理想。
+在 $R/I$ 上定义
+\[
+(a+I)+(b+I)=(a+b)+I,\qquad (a+I)(b+I)=ab+I.
+\]
+这样得到的环称为 $R$ 对 $I$ 的\textbf{商环}，记为 $R/I$。
+\end{definition}
+
+当 $R$ 是交换环时，左右乘法没有区别，"双边"条件自动满足；此时只需说 $I$ 是 $R$ 的理想。
+
+商环的零元是 $0+I$，也就是 $I$ 这个等价类本身。
+若 $R$ 有单位元 $1_R$，则 $1_R+I$ 是 $R/I$ 的单位元，因为
+\[
+(1_R+I)(a+I)=a+I,\qquad (a+I)(1_R+I)=a+I.
+\]
+若 $R$ 是交换环，则
+\[
+(a+I)(b+I)=ab+I=ba+I=(b+I)(a+I),
+\]
+所以 $R/I$ 也是交换环。
+
+\subsection{自然映射}\label{sec:canonical-map-quotient-ring}
+
+商环一旦构造出来，就自带一个最自然的映射：
+\[
+\pi:R\to R/I,\qquad \pi(a)=a+I.
+\]
+它把 $R$ 中的每个元素送到自己所在的等价类。
+这个映射记录了商环的构造过程：原来在 $R$ 里不同的元素，只要相差一个 $I$ 中的元素，在 $R/I$ 中就被送到同一个类里。
+
+映射 $\pi$ 是满的环同态。
+满射性很直接：$R/I$ 中任意元素本来就是某个 $a+I$，而 $\pi(a)=a+I$。
+它保持加法，因为
+\[
+\pi(a+b)=(a+b)+I=(a+I)+(b+I)=\pi(a)+\pi(b).
+\]
+它也保持乘法，因为
+\[
+\pi(ab)=ab+I=(a+I)(b+I)=\pi(a)\pi(b).
+\]
+所以 $\pi$ 是一个满环同态。
+
+它的核正好是 $I$：
+\[
+\ker\pi=\{a\in R:\pi(a)=0+I\}
+=\{a\in R:a+I=I\}=I.
+\]
+最后一个等号的意思是：$a+I=0+I$ 当且仅当 $a-0=a\in I$。
+
+因此，商环可以理解为"把 $I$ 中所有元素压成零以后得到的环"。
+自然映射 $\pi$ 就是这个压缩过程本身。
+后面讲环同态第一基本定理时，会看到任意环同态都可以分解成这种形式：先把核压成零，再进入同态的像。
+
+\subsection{两个基本例子}\label{sec:quotient-ring-examples}
+
+\paragraph*{例 1：$\mathbb Q[x]/(x^2-2)$}
+设
+\[
+I=(x^2-2)\subseteq \mathbb Q[x].
+\]
+商环 $\mathbb Q[x]/I$ 的元素是形如 $f(x)+I$ 的等价类。
+对任意 $f(x)\in\mathbb Q[x]$，用 $x^2-2$ 作带余除法：
+\[
+f(x)=q(x)(x^2-2)+(ax+b),
+\qquad a,b\in\mathbb Q.
+\]
+这里余式 $ax+b$ 由带余除法唯一确定。
+于是
+\[
+f(x)+I=ax+b+I.
+\]
+也就是说，商环中的每个元素都可以由一次式代表，而且这个一次式代表是唯一的。
+如果 $ax+b+I=a'x+b'+I$，则
+\[
+(a-a')x+(b-b')\in (x^2-2).
+\]
+左边次数小于 $2$，除非它是零多项式，否则不可能是 $x^2-2$ 的倍数。
+因此 $a=a'$ 且 $b=b'$。
+
+在这个商环中，
+\[
+x^2+I=2+I,
+\]
+因为 $x^2-2\in I$。
+所以 $x+I$ 的行为像一个平方等于 $2$ 的元素。
+这已经很像 $\sqrt2$ 在 $\mathbb Q(\sqrt2)$ 中的行为。
+
+定义映射
+\[
+\overline\Phi:\mathbb Q[x]/(x^2-2)\to\mathbb Q(\sqrt2),
+\qquad
+\overline\Phi(f(x)+I)=f(\sqrt2).
+\]
+这个映射把 $x+I$ 送到 $\sqrt2$。
+它是良定义的：若 $f(x)+I=g(x)+I$，则 $f(x)-g(x)\in I$，所以 $f(x)-g(x)$ 是 $x^2-2$ 的倍数；代入 $x=\sqrt2$ 后得到 $f(\sqrt2)-g(\sqrt2)=0$。
+
+带余除法说明 $\mathbb Q[x]/I$ 中每个元素都可以写成 $ax+b+I$，而
+\[
+\overline\Phi(ax+b+I)=a\sqrt2+b.
+\]
+这正好给出 $\mathbb Q(\sqrt2)$ 中的元素。
+反过来，$\mathbb Q(\sqrt2)$ 中每个 $b+a\sqrt2$ 都来自 $ax+b+I$。
+因此
+\[
+\mathbb Q[x]/(x^2-2)\cong\mathbb Q(\sqrt2).
+\]
+
+这个例子说明，商环可以把"加入一个平方等于 $2$ 的元素"这件事代数化。
+我们不是直接把 $\sqrt2$ 塞进 $\mathbb Q$，而是在多项式环里规定 $x^2-2$ 等于零。
+
+\paragraph*{例 2：$\mathbb R[x]/(x^2+1)$}
+复数也可以用同样的方法得到。
+设
+\[
+I=(x^2+1)\subseteq \mathbb R[x].
+\]
+对任意 $g(x)\in\mathbb R[x]$，用 $x^2+1$ 作带余除法：
+\[
+g(x)=(x^2+1)p(x)+(ax+b),
+\qquad a,b\in\mathbb R.
+\]
+所以每个等价类都可以写成
+\[
+ax+b+I.
+\]
+
+这类代表元的加法很直接：
+\[
+(ax+b+I)+(cx+d+I)=(a+c)x+(b+d)+I.
+\]
+乘法则需要用到商环中的关系 $x^2+I=-1+I$。
+先在多项式环里相乘：
+\[
+(ax+b)(cx+d)=acx^2+(ad+bc)x+bd.
+\]
+因为 $x^2+1\in I$，所以 $x^2+I=-1+I$。
+于是
+\[
+(ax+b+I)(cx+d+I)=(ad+bc)x+(bd-ac)+I.
+\]
+
+现在把
+\[
+ax+b+I
+\]
+对应到复数
+\[
+b+ai.
+\]
+加法也对应得上：
+\[
+(b+ai)+(d+ci)=(b+d)+(a+c)i,
+\]
+这与商环里的
+\[
+(ax+b+I)+(cx+d+I)=(a+c)x+(b+d)+I
+\]
+一致。
+那么两个复数相乘得到
+\[
+(b+ai)(d+ci)=(bd-ac)+(ad+bc)i.
+\]
+这与上面的商环乘法完全一致。
+所以这个对应同时保持加法和乘法。
+因此
+\[
+\mathbb R[x]/(x^2+1)\cong\mathbb C.
+\]
+
+这个同构给出了复数域的一种等价定义。
+复数不是凭空多出来的对象；它也可以看成在实系数多项式环中强行加入关系 $x^2+1=0$ 后得到的商环。
+这正是商环构造的基本作用：把某个代数关系压进原来的环里。
+
+\subsection{商模}\label{sec:quotient-modules}
+
+商环是按理想取商；模也可以按子模取商。
+这个构造和线性代数里的商空间非常接近：把一个子空间里的向量看成零向量，然后把相差这个子空间中向量的两个向量看成同一个类。
+
+设 $M$ 是左 $R$-模，$N$ 是 $M$ 的子模。
+对 $x,y\in M$，定义
+\[
+x\sim y \quad\Longleftrightarrow\quad x-y\in N.
+\]
+元素 $x$ 的等价类记为
+\[
+x+N=\{x+z:z\in N\},
+\]
+所有等价类组成的集合记为 $M/N$。
+
+在 $M/N$ 上定义加法和 $R$ 的作用：
+\[
+(x+N)+(y+N)=(x+y)+N,
+\qquad
+r(x+N)=rx+N.
+\]
+同样需要检查良定义。
+若 $x-x'\in N$，$y-y'\in N$，则
+\[
+(x+y)-(x'+y')=(x-x')+(y-y')\in N,
+\]
+所以加法良定义。
+若 $x-x'\in N$，则
+\[
+rx-rx'=r(x-x')\in N,
+\]
+这里用到的是 $N$ 对 $R$ 的作用封闭。
+因此标量作用也良定义。
+
+\begin{definition}[商模]\label{def:quotient-module}
+设 $M$ 是左 $R$-模，$N$ 是 $M$ 的子模。
+按上述等价关系、加法和 $R$ 的作用得到的左 $R$-模称为 $M$ 对 $N$ 的\textbf{商模}，记为 $M/N$。
+\end{definition}
+
+\paragraph*{例：线性空间的商空间}\label{ex:quotient-vector-space}
+取 $M=\mathbb R^2$，把它看成通常的实向量空间，也就是 $\mathbb R$-模。
+令
+\[
+N=\langle(1,0)\rangle=\{(t,0):t\in\mathbb R\}.
+\]
+这是 $\mathbb R^2$ 的一个子模。
+在商模 $\mathbb R^2/N$ 中，等价类
+\[
+(x,y)+N
+\]
+包含所有
+\[
+(x+t,y),\qquad t\in\mathbb R.
+\]
+也就是说，沿着横轴方向的差别都被看成同一个类；真正留下来的信息只有第二个坐标。
+
+定义
+\[
+\rho:\mathbb R^2/N\to\mathbb R,\qquad \rho((x,y)+N)=y.
+\]
+这个映射是良定义的。
+若
+\[
+(x,y)+N=(x',y')+N,
+\]
+则 $(x,y)-(x',y')=(x-x',y-y')\in N$。
+而 $N$ 中元素的第二个坐标都是 $0$，所以 $y-y'=0$，即 $y=y'$。
+因此 $\rho$ 不依赖代表元的选择。
+
+加法和标量作用也都按第二个坐标计算：
+\[
+\rho(((x,y)+N)+((x',y')+N))=y+y',
+\qquad
+\rho(\lambda((x,y)+N))=\lambda y.
+\]
+所以
+\[
+\mathbb R^2/N\cong\mathbb R.
+\]
+这个例子说明，商模不是把子模简单删掉，而是把沿着子模方向的差别视为同一个类。
+
+商模不需要额外引入"正规子模"这个概念。
+原因是模的加法群本来就是阿贝尔群，而阿贝尔群中的子群自动正规；所以用差属于 $N$ 来定义等价关系时，不会遇到群论里非正规子群带来的问题。
+
+当环 $R$ 看成自身上的左 $R$-模时，子模就是对加法封闭并且对左乘封闭的子集，也就是左理想。
+如果 $R$ 是交换环，或者我们同时要求左右乘法封闭，就回到前面讲的理想。
+这解释了为什么商环和商模的构造如此相似：理想本来就可以看成环作用在自身上时的特殊子模。
+
+若 $I$ 是 $R$ 的理想，那么 $R/I$ 不只是商环，也自然是一个左 $R$-模。
+作用定义为
+\[
+r(a+I)=ra+I.
+\]
+它的良定义与商模的良定义完全一样。
+这个视角会在后面理解同态定理时继续出现：同态的核告诉我们哪些元素要被压成零，而商结构记录了压缩之后剩下的对象。
+
+\subsection*{课堂问题参考解答}
+
+\begin{exercise}\label{ex:ans-quotient-ring-two-sided}
+\hypertarget{ans:quotient-ring-two-sided}{}
+\textbf{商环的加法良定义只用到 $I$ 是加法子群，乘法良定义为什么必须要求 $I$ 是双边理想？}
+
+加法良定义只需要处理
+\[
+(a+b)-(a'+b')=(a-a')+(b-b').
+\]
+如果 $a-a'\in I$，$b-b'\in I$，那么右边仍在 $I$ 中；这只用到 $I$ 是加法子群。
+
+乘法良定义要处理
+\[
+ab-a'b'=(a-a')b+a'(b-b').
+\]
+其中 $(a-a')b$ 要求 $I$ 对右乘吸收，$a'(b-b')$ 要求 $I$ 对左乘吸收。
+所以在非交换环中必须要求 $I$ 是双边理想。
+如果 $R$ 是交换环，左右吸收合并成同一件事，条件看起来就没有那么明显，但本质上仍然是在保证乘法不依赖代表元。
+
+\hyperlink{q:quotient-ring-two-sided}{返回问题}
+\end{exercise}
+
+\section{环同态第一基本定理}\label{sec:first-isomorphism-theorem-rings}
+
+上一节的自然映射
+\[
+\pi:R\to R/I,\qquad \pi(a)=a+I
+\]
+有一个很清楚的特点：它的核正好是 $I$。
+也就是说，商环 $R/I$ 是把 $I$ 中的元素全部压成零以后得到的对象。
+环同态第一基本定理把这个现象反过来说：任意环同态都可以理解为先商掉它的核，再进入它的像。
+
+\begin{theorem}[环同态第一基本定理]\label{thm:first-isomorphism-theorem-rings}
+设 $\varphi:R\to S$ 是环同态。
+则 $\ker\varphi$ 是 $R$ 的双边理想，并且
+\[
+R/\ker\varphi\cong \operatorname{im}\varphi.
+\]
+若记 $I=\ker\varphi$，这个同构由
+\[
+\psi:R/I\to\operatorname{im}\varphi,\qquad
+\psi(a+I)=\varphi(a)
+\]
+给出。
+\end{theorem}
+
+这条定理可以先用一张交换图理解：
+\[
+\begin{tikzpicture}[node distance=2.8cm, baseline=(R.base)]
+  \node (R) {$R$};
+  \node[right=of R] (Im) {$\operatorname{im}\varphi$};
+  \node[below=of R] (Q) {$R/\ker\varphi$};
+  \draw[->] (R) -- node[above] {$\varphi$} (Im);
+  \draw[->] (R) -- node[left] {$\pi$} (Q);
+  \draw[->] (Q) -- node[below right] {$\psi$} (Im);
+\end{tikzpicture}
+\]
+其中 $\pi(a)=a+\ker\varphi$ 是自然投影，$\psi(a+\ker\varphi)=\varphi(a)$ 是定理构造出的同构。
+图的意思是：从 $R$ 直接沿上方的 $\varphi$ 走到 $\operatorname{im}\varphi$，和先沿下方的 $\pi$ 走到商环，再沿 $\psi$ 走到像，结果相同。
+用公式写就是
+\[
+\varphi=\psi\circ\pi.
+\]
+这句话是第一基本定理的核心读法：同态 $\varphi$ 的"混淆"全部由核负责；商掉核以后，剩下的部分与像完全同构。
+
+\paragraph*{证明}
+先证明 $\ker\varphi$ 是 $R$ 的双边理想。
+因为环同态保持零元，所以
+\[
+\varphi(0_R)=0_S,
+\]
+从而 $0_R\in\ker\varphi$，核非空。
+若 $a,b\in\ker\varphi$，则
+\[
+\varphi(a-b)=\varphi(a)-\varphi(b)=0_S-0_S=0_S,
+\]
+所以 $a-b\in\ker\varphi$。
+这说明 $\ker\varphi$ 对差封闭。
+
+还要检查它能吸收 $R$ 中任意元素的左右乘法。
+任取 $r\in R$，$a\in\ker\varphi$。
+由于 $\varphi(a)=0_S$，有
+\[
+\varphi(ra)=\varphi(r)\varphi(a)=\varphi(r)0_S=0_S,
+\]
+所以 $ra\in\ker\varphi$。
+同理
+\[
+\varphi(ar)=\varphi(a)\varphi(r)=0_S\varphi(r)=0_S,
+\]
+所以 $ar\in\ker\varphi$。
+左右两边都要验证，是因为这里的环不一定交换。
+因此 $\ker\varphi$ 是双边理想。
+
+下面构造从商环到像的映射。
+记
+\[
+I=\ker\varphi.
+\]
+商环中的元素具有形式 $a+I$。
+定义
+\[
+\psi:R/I\to\operatorname{im}\varphi,\qquad \psi(a+I)=\varphi(a).
+\]
+这里要注意，$\psi(a+I)$ 映成的是 $\varphi(a)$，不是 $a$。
+映射 $\varphi$ 的输入是 $R$ 中的元素，而 $\psi$ 的输入是商环中的等价类。
+定义式右边的 $\varphi(a)$ 按定义属于 $\operatorname{im}\varphi$，所以值域没有跑出去。
+
+先检查良定义。
+若 $a+I=b+I$，则 $a-b\in I=\ker\varphi$。
+因此
+\[
+0_S=\varphi(a-b)=\varphi(a)-\varphi(b),
+\]
+从而 $\varphi(a)=\varphi(b)$。
+所以 $\psi(a+I)$ 不依赖代表元的选择。
+
+再检查 $\psi$ 保持环运算。
+对加法，有
+\[
+\psi((a+I)+(b+I))
+=\psi((a+b)+I)
+=\varphi(a+b)
+=\varphi(a)+\varphi(b)
+=\psi(a+I)+\psi(b+I).
+\]
+对乘法，有
+\[
+\psi((a+I)(b+I))
+=\psi(ab+I)
+=\varphi(ab)
+=\varphi(a)\varphi(b)
+=\psi(a+I)\psi(b+I).
+\]
+按照本讲义采用的环同态约定，这里不额外验证保持单位元；需要保持单位元时，只需在同态定义中额外加入相应条件。
+
+接着证明 $\psi$ 是单射。
+若
+\[
+\psi(a+I)=\psi(b+I),
+\]
+则
+\[
+\varphi(a)=\varphi(b).
+\]
+移项得到
+\[
+\varphi(a-b)=0_S,
+\]
+所以 $a-b\in\ker\varphi=I$。
+这说明 $a$ 和 $b$ 在商环中属于同一个等价类，即
+\[
+a+I=b+I.
+\]
+注意，这里并不是推出 $a=b$。
+因为 $\varphi$ 不一定是单射，我们只能推出 $a-b$ 落在核里；但这已经足够说明两个等价类相等。
+
+\hypertarget{q:first-isomorphism-not-a-equals-b}{}
+\medskip
+\noindent\textbf{思考：为什么从 $\psi(a+I)=\psi(b+I)$ 只能推出 $a+I=b+I$，而不能推出 $a=b$？}（\hyperlink{ans:first-isomorphism-not-a-equals-b}{跳转到解答}。）
+\medskip
+
+最后证明 $\psi$ 是满射。
+任取 $y\in\operatorname{im}\varphi$。
+按像的定义，存在 $a\in R$，使得
+\[
+y=\varphi(a).
+\]
+于是
+\[
+\psi(a+I)=\varphi(a)=y.
+\]
+这就为任意像中的元素找到了商环中的原像。
+因此 $\psi$ 是双射环同态，也就是环同构。
+定理得证。 $\square$
+
+\subsection*{课堂问题参考解答}
+
+\begin{exercise}\label{ex:ans-first-isomorphism-not-a-equals-b}
+\hypertarget{ans:first-isomorphism-not-a-equals-b}{}
+\textbf{为什么从 $\psi(a+I)=\psi(b+I)$ 只能推出 $a+I=b+I$，而不能推出 $a=b$？}
+
+等式 $\psi(a+I)=\psi(b+I)$ 的意思是
+\[
+\varphi(a)=\varphi(b).
+\]
+这只说明
+\[
+\varphi(a-b)=0,
+\]
+也就是 $a-b\in\ker\varphi=I$。
+商环 $R/I$ 正是把相差一个 $I$ 中元素的两个元素看成同一个类，所以我们能推出的是
+\[
+a+I=b+I.
+\]
+如果核不为零，原环中确实可能有 $a\neq b$ 但 $\varphi(a)=\varphi(b)$。
+第一基本定理的要点正是：把核商掉以后，这种混淆就消失了。
+
+\hyperlink{q:first-isomorphism-not-a-equals-b}{返回问题}
+\end{exercise}
+
+\section{后续同构定理}\label{sec:further-isomorphism-theorems-rings}
+
+在第一基本定理中，我们研究的是一个同态的核，以及把核商掉以后得到的结构。
+但在一个环 $R$ 中，常常会同时出现多个理想。
+多个理想之间一旦发生关系，就会衍生出更复杂的商结构。
+
+最简单的情况是两个理想有包含关系。
+设 $I,J$ 都是 $R$ 的理想，并且
+\[
+I\subseteq J.
+\]
+这时有两个自然问题：
+一方面，$J/I$ 能不能看成商环 $R/I$ 中的理想；
+另一方面，$R/I$、$R/J$ 与 $J/I$ 之间究竟有什么关系。
+这条线索导向第三基本定理。
+
+另一种情况是 $I$ 和 $J$ 没有包含关系。
+这时不能直接写出 $J/I$ 或 $I/J$，于是自然要看两个由 $I,J$ 共同生成的对象：
+\[
+I+J,\qquad I\cap J.
+\]
+前者记录把两个理想合在一起以后得到的部分，后者记录二者的重叠部分。
+这条线索导向第二基本定理。
+
+\subsection{满同态下的理想对应}\label{sec:ideal-correspondence-quotient}
+
+在正式讨论第三、第二基本定理之前，先看一个常用的中间结论。
+它说明满同态会把包含核的理想，与目标环中的理想联系起来。
+
+\begin{theorem}[满同态下的理想对应]\label{thm:ideal-correspondence-quotient}
+设 $\varphi:R\to S$ 是满环同态，$J=\ker\varphi$。
+
+若 $R'$ 是 $R$ 的双边理想且 $J\subseteq R'$，则 $S'=\varphi(R')$ 是 $S$ 的双边理想。
+若 $S'$ 是 $S$ 的双边理想，则 $\varphi^{-1}(S')$ 是 $R$ 的双边理想，并且包含 $J$。
+
+进一步，若 $R'$ 与 $S'=\varphi(R')$ 对应，则有自然同构
+\[
+R/R'\cong S/S'.
+\]
+\end{theorem}
+
+\paragraph*{证明}
+先证明像的方向。
+设 $R'$ 是 $R$ 的双边理想，且 $J\subseteq R'$。
+令
+\[
+S'=\varphi(R')=\{\varphi(r'):r'\in R'\}.
+\]
+因为 $0_R\in R'$，所以
+\[
+0_S=\varphi(0_R)\in S',
+\]
+从而 $S'$ 非空。
+若 $s_1,s_2\in S'$，则存在 $r_1,r_2\in R'$，使得
+\[
+s_1=\varphi(r_1),\qquad s_2=\varphi(r_2).
+\]
+于是
+\[
+s_1-s_2=\varphi(r_1)-\varphi(r_2)=\varphi(r_1-r_2).
+\]
+由于 $R'$ 对差封闭，$r_1-r_2\in R'$，所以 $s_1-s_2\in S'$。
+这说明 $S'$ 对差封闭。
+
+接着检查吸收性。
+任取 $s_1\in S'$，任取 $s\in S$。
+写 $s_1=\varphi(r_1)$，其中 $r_1\in R'$。
+因为 $\varphi$ 是满射，存在 $r\in R$，使得
+\[
+s=\varphi(r).
+\]
+于是
+\[
+ss_1=\varphi(r)\varphi(r_1)=\varphi(rr_1),
+\qquad
+s_1s=\varphi(r_1)\varphi(r)=\varphi(r_1r).
+\]
+由于 $R'$ 是双边理想，$rr_1,r_1r\in R'$。
+因此 $ss_1,s_1s\in S'$。
+所以 $S'$ 是 $S$ 的双边理想。
+注意，满射正是在这里使用的：为了处理任意 $S$ 中元素 $s$，必须把它写成某个 $R$ 中元素的像。
+
+再证明原像的方向。
+设 $S'$ 是 $S$ 的双边理想。
+记
+\[
+T=\varphi^{-1}(S')=\{r\in R:\varphi(r)\in S'\}.
+\]
+因为 $0_S\in S'$ 且 $\varphi(0_R)=0_S$，所以 $0_R\in T$。
+若 $x,y\in T$，则 $\varphi(x),\varphi(y)\in S'$，从而
+\[
+\varphi(x-y)=\varphi(x)-\varphi(y)\in S',
+\]
+所以 $x-y\in T$。
+这说明 $T$ 对差封闭。
+
+任取 $x\in T$，$r\in R$。
+由 $x\in T$ 可知 $\varphi(x)\in S'$。
+于是
+\[
+\varphi(rx)=\varphi(r)\varphi(x)\in S',
+\qquad
+\varphi(xr)=\varphi(x)\varphi(r)\in S',
+\]
+因为 $S'$ 是 $S$ 的双边理想。
+所以 $rx,xr\in T$。
+因此 $T$ 是 $R$ 的双边理想。
+这一方向没有用到 $\varphi$ 的满射性。
+此外，若 $a\in J=\ker\varphi$，则
+\[
+\varphi(a)=0_S\in S',
+\]
+所以 $a\in T$。
+这说明 $J\subseteq \varphi^{-1}(S')$。
+
+最后证明商环之间的同构。
+设 $R'$ 是包含 $J$ 的双边理想，并令 $S'=\varphi(R')$。
+定义
+\[
+\Psi:R/R'\to S/S',
+\qquad
+\Psi(a+R')=\varphi(a)+S'.
+\]
+这个定义的值确实落在 $S/S'$ 中。
+下面先检查良定义。
+若
+\[
+a+R'=b+R',
+\]
+则 $a-b\in R'$。
+因此
+\[
+\varphi(a)-\varphi(b)=\varphi(a-b)\in \varphi(R')=S',
+\]
+所以
+\[
+\varphi(a)+S'=\varphi(b)+S'.
+\]
+这说明 $\Psi$ 不依赖代表元的选择。
+
+再检查 $\Psi$ 保持环运算。
+对加法，有
+\[
+\Psi((a+R')+(b+R'))
+=\Psi((a+b)+R')
+=\varphi(a+b)+S'
+\]
+\[
+=(\varphi(a)+\varphi(b))+S'
+=(\varphi(a)+S')+(\varphi(b)+S')
+=\Psi(a+R')+\Psi(b+R').
+\]
+对乘法，有
+\[
+\Psi((a+R')(b+R'))
+=\Psi(ab+R')
+=\varphi(ab)+S'
+\]
+\[
+=\varphi(a)\varphi(b)+S'
+=(\varphi(a)+S')(\varphi(b)+S')
+=\Psi(a+R')\Psi(b+R').
+\]
+所以 $\Psi$ 是环同态。
+
+证明 $\Psi$ 是满射。
+任取 $s+S'\in S/S'$。
+因为 $\varphi$ 是满射，存在 $a\in R$，使得 $s=\varphi(a)$。
+于是
+\[
+\Psi(a+R')=\varphi(a)+S'=s+S'.
+\]
+所以 $\Psi$ 满射。
+
+证明 $\Psi$ 是单射。
+只需说明 $\ker\Psi$ 是 $R/R'$ 的零元。
+若
+\[
+\Psi(a+R')=S',
+\]
+则
+\[
+\varphi(a)+S'=S',
+\]
+也就是 $\varphi(a)\in S'=\varphi(R')$。
+因此存在 $r'\in R'$，使得
+\[
+\varphi(a)=\varphi(r').
+\]
+于是
+\[
+\varphi(a-r')=0_S,
+\]
+所以 $a-r'\in\ker\varphi=J$。
+又因为 $J\subseteq R'$，且 $r'\in R'$，可得
+\[
+a=(a-r')+r'\in R'.
+\]
+这说明 $a+R'=R'$。
+因此 $\ker\Psi$ 只有零元，$\Psi$ 是单射。
+综上，
+\[
+R/R'\cong S/S'.
+\]
+定理证毕。 $\square$
+
+这里也可以看出满射条件的重要性。
+例如从 $\mathbb Z$ 到 $\mathbb Q$ 的包含同态不是满同态，$\mathbb Z$ 中的理想在 $\mathbb Q$ 中的像不一定是 $\mathbb Q$ 的理想。
+比如 $2\mathbb Z$ 在 $\mathbb Q$ 中并不能吸收任意有理数乘法，所以不是 $\mathbb Q$ 的理想。
+
+\hypertarget{q:ideal-correspondence-surjective}{}
+\medskip
+\noindent\textbf{思考：为什么证明 $\varphi(R')$ 是 $S$ 的理想时必须用到 $\varphi$ 满射？}（\hyperlink{ans:ideal-correspondence-surjective}{跳转到解答}。）
+\medskip
+
+\subsection{第三基本定理：从分解图看商中再商}\label{sec:third-isomorphism-theorem-diagram}
+
+现在回到包含关系的情况。
+设 $\varphi:R\to S$ 是满环同态，$J=\ker\varphi$。
+如果 $I$ 是 $R$ 的双边理想，并且
+\[
+I\subseteq J,
+\]
+那么 $\varphi$ 会经过商环 $R/I$ 下降为一个同态。
+这件事可以用下面的图来组织：
+\[
+\begin{tikzpicture}[node distance=2.7cm and 3.4cm, baseline=(R.base)]
+  \node (R) {$R$};
+  \node[right=of R] (RJ) {$R/J$};
+  \node[below=of R] (RI) {$R/I$};
+  \node[right=of RI] (S) {$S$};
+  \node[below=of RI] (Q) {$(R/I)/(J/I)$};
+
+  \draw[->] (R) -- node[above] {$\pi_J$} (RJ);
+  \draw[->] (R) -- node[left] {$\pi_I$} (RI);
+  \draw[->] (R) -- node[above right] {$\varphi$} (S);
+  \draw[->] (RJ) -- node[right] {$\varphi_J$} (S);
+  \draw[->] (RI) -- node[above] {$\bar\varphi$} (S);
+  \draw[->] (RI) -- node[left] {$\pi_{J/I}$} (Q);
+  \draw[->] (Q) -- node[below right] {$\cong$} (S);
+\end{tikzpicture}
+\]
+这里 $\pi_I$ 与 $\pi_J$ 都是自然映射。
+由第一基本定理，$\varphi_J:R/J\to S$ 是同构。
+图中真正需要新构造的是
+\[
+\bar\varphi:R/I\to S,\qquad \bar\varphi(a+I)=\varphi(a).
+\]
+如果这个映射构造成功，并且它的核是 $J/I$，那么再对 $\bar\varphi$ 使用第一基本定理，就会得到
+\[
+(R/I)/(J/I)\cong S.
+\]
+又因为 $R/J\cong S$，于是得到
+\[
+(R/I)/(J/I)\cong R/J.
+\]
+
+先说明 $J/I$ 可以看成 $R/I$ 的双边理想。
+它的元素形式是
+\[
+j+I,\qquad j\in J.
+\]
+因为 $J$ 对差封闭，若 $j_1,j_2\in J$，则
+\[
+(j_1+I)-(j_2+I)=(j_1-j_2)+I\in J/I.
+\]
+又任取 $r\in R$，$j\in J$，在 $R/I$ 中有
+\[
+(r+I)(j+I)=rj+I,\qquad (j+I)(r+I)=jr+I.
+\]
+由于 $J$ 是 $R$ 的双边理想，$rj,jr\in J$，所以这两个乘积仍在 $J/I$ 中。
+因此 $J/I$ 是 $R/I$ 的双边理想。
+
+下面构造 $\bar\varphi$。
+定义
+\[
+\bar\varphi:R/I\to S,\qquad \bar\varphi(a+I)=\varphi(a).
+\]
+先检查良定义。
+若 $a+I=b+I$，则 $a-b\in I$。
+因为 $I\subseteq J=\ker\varphi$，所以 $a-b\in\ker\varphi$，从而
+\[
+0_S=\varphi(a-b)=\varphi(a)-\varphi(b).
+\]
+因此 $\varphi(a)=\varphi(b)$。
+这说明 $\bar\varphi$ 不依赖代表元选择。
+
+再检查它是环同态。
+对加法，
+\[
+\bar\varphi((a+I)+(b+I))
+=\bar\varphi((a+b)+I)
+=\varphi(a+b)
+=\varphi(a)+\varphi(b)
+=\bar\varphi(a+I)+\bar\varphi(b+I).
+\]
+对乘法，
+\[
+\bar\varphi((a+I)(b+I))
+=\bar\varphi(ab+I)
+=\varphi(ab)
+=\varphi(a)\varphi(b)
+=\bar\varphi(a+I)\bar\varphi(b+I).
+\]
+所以 $\bar\varphi$ 是环同态。
+
+它还是满射。
+任取 $s\in S$，由于 $\varphi$ 是满射，存在 $a\in R$，使得 $s=\varphi(a)$。
+于是
+\[
+\bar\varphi(a+I)=\varphi(a)=s.
+\]
+
+最后计算 $\bar\varphi$ 的核。
+若 $a+I\in\ker\bar\varphi$，则
+\[
+\bar\varphi(a+I)=0_S,
+\]
+即 $\varphi(a)=0_S$。
+所以 $a\in\ker\varphi=J$，从而
+\[
+a+I\in J/I.
+\]
+反过来，若 $a+I\in J/I$，则 $a\in J=\ker\varphi$，于是
+\[
+\bar\varphi(a+I)=\varphi(a)=0_S.
+\]
+所以 $a+I\in\ker\bar\varphi$。
+因此
+\[
+\ker\bar\varphi=J/I.
+\]
+
+\hypertarget{q:third-iso-kernel}{}
+\medskip
+\noindent\textbf{思考：为什么 $\ker\bar\varphi$ 是 $J/I$，而不是 $J$？}（\hyperlink{ans:third-iso-kernel}{跳转到解答}。）
+\medskip
+
+对 $\bar\varphi$ 使用第一基本定理，得到
+\[
+(R/I)/(J/I)\cong S.
+\]
+另一方面，对原来的满同态 $\varphi:R\to S$ 使用第一基本定理，得到
+\[
+R/J\cong S.
+\]
+于是
+\[
+(R/I)/(J/I)\cong R/J.
+\]
+这说明：如果 $I\subseteq J$，先商掉 $I$，再在商环 $R/I$ 中商掉 $J/I$，和一开始直接商掉 $J$ 得到的是同构的结果。
+
+\subsection{第三基本定理的常规形式}\label{sec:third-isomorphism-theorem-rings}
+
+把上面的讨论抽离出来，就得到第三基本定理的常规表述。
+
+\begin{theorem}[环同态第三基本定理]\label{thm:third-isomorphism-theorem-rings}
+设 $R$ 是环，$I,J$ 是 $R$ 的双边理想，且 $I\subseteq J$。
+则 $J/I$ 是 $R/I$ 的双边理想，并且
+\[
+(R/I)/(J/I)\cong R/J.
+\]
+\end{theorem}
+
+\paragraph*{证明}
+前面已经说明过，$J/I$ 是 $R/I$ 的双边理想。
+现在直接构造一个从 $R/I$ 到 $R/J$ 的满同态：
+\[
+\Phi:R/I\to R/J,\qquad \Phi(r+I)=r+J.
+\]
+先检查良定义。
+若 $r_1+I=r_2+I$，则 $r_1-r_2\in I$。
+由于 $I\subseteq J$，有 $r_1-r_2\in J$，所以
+\[
+r_1+J=r_2+J.
+\]
+因此 $\Phi$ 良定义。
+
+它是满射，因为任取 $r+J\in R/J$，都有
+\[
+\Phi(r+I)=r+J.
+\]
+它保持加法：
+\[
+\Phi((r_1+I)+(r_2+I))
+=\Phi((r_1+r_2)+I)
+=(r_1+r_2)+J
+\]
+\[
+=(r_1+J)+(r_2+J)
+=\Phi(r_1+I)+\Phi(r_2+I).
+\]
+它保持乘法：
+\[
+\Phi((r_1+I)(r_2+I))
+=\Phi(r_1r_2+I)
+=r_1r_2+J
+\]
+\[
+=(r_1+J)(r_2+J)
+=\Phi(r_1+I)\Phi(r_2+I).
+\]
+所以 $\Phi$ 是满环同态。
+
+再计算核。
+一个元素 $r+I$ 落在 $\ker\Phi$ 中，当且仅当
+\[
+\Phi(r+I)=J,
+\]
+也就是
+\[
+r+J=J.
+\]
+这等价于 $r\in J$。
+因此
+\[
+\ker\Phi=\{r+I:r\in J\}=J/I.
+\]
+由第一基本定理，
+\[
+(R/I)/(J/I)\cong R/J.
+\]
+定理证毕。 $\square$
+
+\subsection{第二基本定理：相加与相交}\label{sec:second-isomorphism-theorem-rings}
+
+第三基本定理处理的是 $I\subseteq J$ 的情形。
+如果两个理想没有包含关系，就不能直接写出 $J/I$ 或 $I/J$。
+这时自然出现两个新对象：一个是把两边都收进来的 $I+J$，另一个是两边共有的 $I\cap J$。
+第二基本定理正是在比较这两个对象给出的商结构。
+
+本校教材中常用的是稍微更一般的版本：一个子环加一个双边理想。
+
+\begin{theorem}[环同态第二基本定理]\label{thm:second-isomorphism-theorem-rings}
+设 $R$ 是环，$A$ 是 $R$ 的子环，$I$ 是 $R$ 的双边理想。
+则 $A+I$ 是 $R$ 的子环，$A\cap I$ 是 $A$ 的双边理想，并且
+\[
+A/(A\cap I)\cong (A+I)/I.
+\]
+\end{theorem}
+
+\paragraph*{证明}
+先证明 $A+I$ 是 $R$ 的子环。
+这里
+\[
+A+I=\{a+x:a\in A,\ x\in I\}.
+\]
+因为 $0_R=0_R+0_R$，且 $0_R\in A$、$0_R\in I$，所以 $A+I$ 非空。
+
+任取 $a_1+x_1,a_2+x_2\in A+I$，其中 $a_1,a_2\in A$，$x_1,x_2\in I$。
+则
+\[
+(a_1+x_1)-(a_2+x_2)=(a_1-a_2)+(x_1-x_2).
+\]
+由于 $A$ 是子环，$a_1-a_2\in A$；
+由于 $I$ 是理想，$x_1-x_2\in I$。
+所以差仍属于 $A+I$。
+
+再检查乘法封闭。
+有
+\[
+(a_1+x_1)(a_2+x_2)
+=a_1a_2+a_1x_2+x_1a_2+x_1x_2.
+\]
+其中 $a_1a_2\in A$。
+后三项都属于 $I$：$a_1x_2\in I$、$x_1a_2\in I$、$x_1x_2\in I$。
+因此
+\[
+a_1x_2+x_1a_2+x_1x_2\in I.
+\]
+整个乘积仍然可以写成一个 $A$ 中元素加一个 $I$ 中元素，所以属于 $A+I$。
+因此 $A+I$ 是 $R$ 的子环。
+
+接着证明 $A\cap I$ 是 $A$ 的双边理想。
+它非空，因为 $0_R\in A\cap I$。
+若 $x,y\in A\cap I$，则 $x-y\in A$ 且 $x-y\in I$，所以 $x-y\in A\cap I$。
+任取 $a\in A$，$x\in A\cap I$。
+因为 $A$ 是子环，$ax,xa\in A$；
+因为 $I$ 是 $R$ 的双边理想，$ax,xa\in I$。
+所以
+\[
+ax,xa\in A\cap I.
+\]
+这说明 $A\cap I$ 是 $A$ 的双边理想。
+
+现在构造同态
+\[
+\theta:A\to (A+I)/I,\qquad \theta(a)=a+I.
+\]
+它保持加法：
+\[
+\theta(a+b)=(a+b)+I=(a+I)+(b+I)=\theta(a)+\theta(b).
+\]
+它保持乘法：
+\[
+\theta(ab)=ab+I=(a+I)(b+I)=\theta(a)\theta(b).
+\]
+
+证明 $\theta$ 是满射。
+任取 $(A+I)/I$ 中的元素 $z+I$，其中 $z\in A+I$。
+按 $A+I$ 的定义，存在 $a\in A$、$i\in I$，使得
+\[
+z=a+i.
+\]
+于是
+\[
+z+I=(a+i)+I=a+I=\theta(a).
+\]
+所以 $\theta$ 满射。
+
+\hypertarget{q:second-iso-surjective}{}
+\medskip
+\noindent\textbf{思考：为什么 $a+i+I=a+I$ 说明 $\theta:A\to(A+I)/I$ 是满射？}（\hyperlink{ans:second-iso-surjective}{跳转到解答}。）
+\medskip
+
+最后计算核。
+若 $a\in\ker\theta$，则
+\[
+\theta(a)=I,
+\]
+也就是
+\[
+a+I=I.
+\]
+这等价于 $a\in I$。
+而 $\theta$ 的定义域是 $A$，所以 $a\in A$。
+因此 $a\in A\cap I$。
+反过来，若 $a\in A\cap I$，则 $a\in I$，所以
+\[
+\theta(a)=a+I=I,
+\]
+即 $a\in\ker\theta$。
+因此
+\[
+\ker\theta=A\cap I.
+\]
+由第一基本定理可得
+\[
+A/(A\cap I)\cong (A+I)/I.
+\]
+定理证毕。 $\square$
+
+如果把 $A$ 换成另一个双边理想 $J$，就得到常见的理想版本：
+\[
+J/(J\cap I)\cong (J+I)/I.
+\]
+这正对应前面说的第二种情况：当两个理想没有包含关系时，我们通过相加 $J+I$ 和相交 $J\cap I$ 来描述它们之间的商结构。
+
+\subsection*{课堂问题参考解答}
+
+\begin{exercise}\label{ex:ans-ideal-correspondence-surjective}
+\hypertarget{ans:ideal-correspondence-surjective}{}
+\textbf{为什么证明 $\varphi(R')$ 是 $S$ 的理想时必须用到 $\varphi$ 满射？}
+
+要证明 $\varphi(R')$ 是 $S$ 的理想，吸收性要求对任意 $s\in S$ 和任意 $s_1\in\varphi(R')$，都有
+\[
+ss_1,\ s_1s\in\varphi(R').
+\]
+若 $s_1=\varphi(r_1)$，其中 $r_1\in R'$，那么为了把 $ss_1$ 写成某个 $R'$ 中元素的像，必须先把任意的 $s\in S$ 写成 $\varphi(r)$。
+这正是满射条件提供的。
+如果 $\varphi$ 不是满射，目标环中可能有一些元素根本不是任何 $R$ 中元素的像，吸收性就无法从 $R'$ 的吸收性推出。
+
+\hyperlink{q:ideal-correspondence-surjective}{返回问题}
+\end{exercise}
+
+\begin{exercise}\label{ex:ans-third-iso-kernel}
+\hypertarget{ans:third-iso-kernel}{}
+\textbf{为什么 $\ker\bar\varphi$ 是 $J/I$，而不是 $J$？}
+
+核必须是定义域中的子集。
+这里 $\bar\varphi$ 的定义域是 $R/I$，所以核中的元素不是 $R$ 中的元素 $a$，而是商环中的等价类 $a+I$。
+
+由定义，
+\[
+\bar\varphi(a+I)=0_S
+\]
+等价于
+\[
+\varphi(a)=0_S,
+\]
+也就是 $a\in J$。
+因此核中的元素正是所有形如 $a+I$ 且 $a\in J$ 的等价类：
+\[
+\ker\bar\varphi=\{a+I:a\in J\}=J/I.
+\]
+所以这里不能写成 $J$；$J$ 是 $R$ 中的理想，而 $J/I$ 才是 $R/I$ 中的理想。
+
+\hyperlink{q:third-iso-kernel}{返回问题}
+\end{exercise}
+
+\begin{exercise}\label{ex:ans-second-iso-surjective}
+\hypertarget{ans:second-iso-surjective}{}
+\textbf{为什么 $a+i+I=a+I$ 说明 $\theta:A\to(A+I)/I$ 是满射？}
+
+满射要证明的是：$(A+I)/I$ 中每个等价类都能被 $\theta$ 命中。
+任取 $z+I\in (A+I)/I$。
+因为 $z\in A+I$，所以可以写成
+\[
+z=a+i,\qquad a\in A,\ i\in I.
+\]
+在模掉 $I$ 的商环里，$i$ 被看成零，因此
+\[
+z+I=(a+i)+I=a+I.
+\]
+而 $a\in A$，所以
+\[
+a+I=\theta(a).
+\]
+这就为任意 $z+I$ 找到了来自 $A$ 的原像 $a$，因此 $\theta$ 是满射。
+
+\hyperlink{q:second-iso-surjective}{返回问题}
+\end{exercise}
